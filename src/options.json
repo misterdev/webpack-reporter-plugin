@@ -4,11 +4,7 @@
     "additionalProperties": false,
     "properties": {
       "hooks": {
-        "description": "Some hooks to listed",
-        "type": "array"
-      },
-      "throttledHooks": {
-        "description": "Define which hooks should be throttled",
+        "description": "Define which hooks to listen at and the throttling",
         "type": "object"
       },
       "reporters": {

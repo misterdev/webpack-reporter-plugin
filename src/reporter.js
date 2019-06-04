@@ -10,14 +10,15 @@ class Reporter {
 		reporter.hooks.info.tap("Reporter", hookData => {
 			// Formats and prints the output
 			self.incrementHookCounter(hookData.hookId);
+			const time = new Date(hookData.lastCall);
 			console.log(
-				`[REPORTER]: ${hookData.hookId} ${this.counter[hookData.hookId]}`
+				`[REPORTER]: ${hookData.hookId} ${this.counter[hookData.hookId]} -- ${time.getMinutes()}:${time.getSeconds()}:${time.getMilliseconds()} `
 			);
 		});
 
 		reporter.hooks.stats.tap("Reporter", hookData => {
 			const statsString = hookData.data.toString(outputOptions);
-			if (statsString) process.stdout.write(`${statsString}\n${"delimiter"}`);
+			// if (statsString) process.stdout.write(`${statsString}\n${"delimiter"}`);
 		});
 	}
 
