@@ -1,0 +1,20 @@
+{
+    "title": "ReporterPluginOptions",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "hooks": {
+        "description": "Some hooks to listed",
+        "type": "array"
+      },
+      "throttledHooks": {
+        "description": "Define which hooks should be throttled",
+        "type": "object"
+      },
+      "reporters": {
+        "description": "One or more custom reporters",
+        "type": "array"
+      }
+    }
+  }
+  

@@ -1,0 +1,14 @@
+{
+  "name": "webpack-reporter-plugin",
+  "version": "1.0.0",
+  "description": "An output-reporter plugin to customize webpack's output",
+  "main": "src/cjs.js",
+  "repository": "https://github.com/misterdev/webpack-reporter-plugin.git",
+  "author": "Devid Farinelli @misterdev",
+  "license": "MIT",
+  "devDependencies": {
+    "schema-utils": "^1.0.0",
+    "tapable": "^1.1.3"
+  },
+  "dependencies": {}
+}
