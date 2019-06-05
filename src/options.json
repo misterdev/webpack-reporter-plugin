@@ -5,7 +5,22 @@
     "properties": {
       "hooks": {
         "description": "Define which hooks to listen at and the throttling",
-        "type": "object"
+        "type": "object",
+        "additionalProperties": false,
+        "properties":{
+          "defaults": {
+            "description": "Wether or not listen to the default hooks",
+            "type": "boolean"
+          },
+          "compiler": {
+            "description": "Compiler hooks settings",
+            "type": "object"
+          },
+          "compilation": {
+            "description": "Compilation hooks settings",
+            "type": "object"
+          }
+        }
       },
       "reporters": {
         "description": "One or more custom reporters",
