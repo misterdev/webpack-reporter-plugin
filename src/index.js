@@ -129,9 +129,34 @@ class ReporterPlugin extends Tapable {
     this.compilerHooks = COMPILER_HOOKS;
     this.compilationHooks = COMPILATION_HOOKS;
 
-    for (const hookId in this.options.hooks) {
-      const throttle = this.options.hooks[hookId];
-      this.hookStats.initHook(hookId, throttle);
+    this.parseHooksOption(this.options.hooks);
+  }
+
+  parseHooksOption(hooksOptions) {
+    const { defaults, compiler, compilation } = hooksOptions;
+    // TODO defaults
+
+    if (compiler) {
+      for (const hookName in compiler) {
+        const throttle = compiler[hookName];
+        if (typeof throttle !== "boolean") {
+          const hookId = `compiler.${hookName}`;
+          this.hookStats.initHook(hookId, throttle);
+        } else {
+          // TODO
+        }
+      }
+    }
+    if (compilation) {
+      for (const hookName in compilation) {
+        const throttle = compilation[hookName];
+        if (typeof throttle !== "boolean") {
+          const hookId = `compilation.${hookName}`;
+          this.hookStats.initHook(hookId, throttle);
+        } else {
+          // TODO
+        }
+      }
     }
   }
 
@@ -205,10 +230,14 @@ class ReporterPlugin extends Tapable {
 
 ReporterPlugin.defaultOptions = {
   hooks: {
-    all: true,
-    'compilation.done': true,
-    'compilation.buildModule': 5,
-    'compilation.contentHash': '0ms',
+    defaults: true,
+    compiler: {
+      done: true
+    },
+    compilation: {
+      buildModule: 5,
+      contentHash: '4ms'
+    }
   },
   reporters: [new Reporter()],
 };
