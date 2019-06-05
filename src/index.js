@@ -24,68 +24,68 @@ const { Tapable, SyncWaterfallHook } = require('tapable');
 
 const Reporter = require('./reporter');
 
-const COMPILER_HOOKS = [
-  'beforeRun',
-  'run',
-  'watchRun',
-  'beforeCompile',
-  'compile',
-  'compilation',
-  'emit',
-  'done',
-  'failed',
-  'invalid',
-  'watchClose',
-];
+const compilerHooks = (selected) => ({
+  'beforeRun': selected,
+  'run': selected,
+  'watchRun': selected,
+  'beforeCompile': selected,
+  'compile': selected,
+  'compilation': selected,
+  'emit': selected,
+  'done': selected,
+  'failed': selected,
+  'invalid': selected,
+  'watchClose': selected
+});
 
-const COMPILATION_HOOKS = [
-  'buildModule',
-  // "finishModules",
-  // "seal",
-  // "beforeChunks",
-  // "afterChunks",
-  // "optimizeDependenciesBasic",
-  // "optimizeDependencies",
-  // "optimizeDependenciesAdvanced",
-  // "afterOptimizeDependencies",
-  // "optimize",
-  // "optimizeModules",
-  // "afterOptimizeModules",
-  // "optimizeChunks",
-  // "afterOptimizeChunks",
-  // "optimizeTree",
-  // "afterOptimizeTree",
-  // "optimizeChunkModules",
-  // "afterOptimizeChunkModules",
-  // "reviveModules",
-  // "optimizeModuleOrder",
-  // "advancedOptimizeModuleOrder",
-  // "beforeModuleIds",
-  // "moduleIds",
-  // "optimizeModuleIds",
-  // "afterOptimizeModuleIds",
-  // "reviveChunks",
-  // "optimizeChunkOrder",
-  // "beforeChunkIds",
-  // "optimizeChunkIds",
-  // "afterOptimizeChunkIds",
-  // "recordModules",
-  // "recordChunks",
-  // "beforeHash",
-  'contentHash',
-  // "afterHash",
-  // "recordHash",
-  // "beforeModuleAssets",
-  // "beforeChunkAssets",
-  // "additionalChunkAssets",
-  // "record",
-  // "additionalAssets",
-  // "optimizeChunkAssets",
-  // "afterOptimizeChunkAssets",
-  // "optimizeAssets",
-  // "afterOptimizeAssets",
-  // "afterSeal"
-];
+const compilationHooks = (selected) => ({
+  'buildModule': selected,
+  // "finishModules": selected,
+  // "seal": selected,
+  // "beforeChunks": selected,
+  // "afterChunks": selected,
+  // "optimizeDependenciesBasic": selected,
+  // "optimizeDependencies": selected,
+  // "optimizeDependenciesAdvanced": selected,
+  // "afterOptimizeDependencies": selected,
+  // "optimize": selected,
+  // "optimizeModules": selected,
+  // "afterOptimizeModules": selected,
+  // "optimizeChunks": selected,
+  // "afterOptimizeChunks": selected,
+  // "optimizeTree": selected,
+  // "afterOptimizeTree": selected,
+  // "optimizeChunkModules": selected,
+  // "afterOptimizeChunkModules": selected,
+  // "reviveModules": selected,
+  // "optimizeModuleOrder": selected,
+  // "advancedOptimizeModuleOrder": selected,
+  // "beforeModuleIds": selected,
+  // "moduleIds": selected,
+  // "optimizeModuleIds": selected,
+  // "afterOptimizeModuleIds": selected,
+  // "reviveChunks": selected,
+  // "optimizeChunkOrder": selected,
+  // "beforeChunkIds": selected,
+  // "optimizeChunkIds": selected,
+  // "afterOptimizeChunkIds": selected,
+  // "recordModules": selected,
+  // "recordChunks": selected,
+  // "beforeHash": selected,
+  'contentHash': selected,
+  // "afterHash": selected,
+  // "recordHash": selected,
+  // "beforeModuleAssets": selected,
+  // "beforeChunkAssets": selected,
+  // "additionalChunkAssets": selected,
+  // "record": selected,
+  // "additionalAssets": selected,
+  // "optimizeChunkAssets": selected,
+  // "afterOptimizeChunkAssets": selected,
+  // "optimizeAssets": selected,
+  // "afterOptimizeAssets": selected,
+  // "afterSeal": selected
+});
 
 /**
  * @typedef { import("./Stats") } Stats
@@ -126,35 +126,37 @@ class ReporterPlugin extends Tapable {
     this.options = Object.assign({}, ReporterPlugin.defaultOptions, options);
     this.reporters = this.options.reporters;
 
-    this.compilerHooks = COMPILER_HOOKS;
-    this.compilationHooks = COMPILATION_HOOKS;
-
     this.parseHooksOption(this.options.hooks);
   }
 
   parseHooksOption(hooksOptions) {
-    const { defaults, compiler, compilation } = hooksOptions;
-    // TODO defaults
+    const self = this;
+    // TODO remove defaults = true
+    const { defaults = true, compiler, compilation } = hooksOptions;
+
+    self.compilerHooks = compilerHooks(defaults);
+    self.compilationHooks = compilationHooks(defaults);
 
     if (compiler) {
       for (const hookName in compiler) {
         const throttle = compiler[hookName];
-        if (typeof throttle !== "boolean") {
-          const hookId = `compiler.${hookName}`;
-          this.hookStats.initHook(hookId, throttle);
+        if (typeof throttle === "boolean") {
+          self.compilerHooks[hookName] = throttle;
         } else {
-          // TODO
+          const hookId = `compiler.${hookName}`;
+          self.hookStats.initHook(hookId, throttle);
         }
       }
     }
+
     if (compilation) {
       for (const hookName in compilation) {
         const throttle = compilation[hookName];
-        if (typeof throttle !== "boolean") {
-          const hookId = `compilation.${hookName}`;
-          this.hookStats.initHook(hookId, throttle);
+        if (typeof throttle === "boolean") {
+          self.compilationHooks[hookName] = throttle;
         } else {
-          // TODO
+          const hookId = `compilation.${hookName}`;
+          self.hookStats.initHook(hookId, throttle);
         }
       }
     }
@@ -182,24 +184,29 @@ class ReporterPlugin extends Tapable {
     );
 
     // Initialize compiler hooks
-    self.compilerHooks.forEach((hookName) => {
-      const hookId = `compiler.${hookName}`;
-
+    console.log(self.compilerHooks)
+    for (const hookName in self.compilerHooks) {
+      if (self.compilerHooks[hookName]) {
+        const hookId = `compiler.${hookName}`;
+  
+        if (!hookStats.hasHook(hookId)) {
+          hookStats.initHook(hookId);
+        }
+  
+        // TODO handle args
+        compiler.hooks[hookName].tap(self.REPORTER_PLUGIN, (...args) => {
+          const hookData = hookStats.generateHookData(hookId);
+          // Emit the log
+          self.emitInfo(hookData);
+        });
+      }
+    }
+    // TODO settable
+    compiler.hooks.done.tap(self.REPORTER_PLUGIN, (stats) => {
+      const hookId = 'compiler.done';
       if (!hookStats.hasHook(hookId)) {
         hookStats.initHook(hookId);
       }
-
-      // TODO handle args
-      compiler.hooks[hookName].tap(self.REPORTER_PLUGIN, (...args) => {
-        const hookData = hookStats.generateHookData(hookId);
-        // Emit the log
-        self.emitInfo(hookData);
-      });
-    });
-
-    compiler.hooks.done.tap(self.REPORTER_PLUGIN, (stats) => {
-      const hookId = 'compiler.done';
-      hookStats.incrementCount(hookId);
       /* @type {HookData} */
       const hookData = hookStats.generateHookData(hookId, stats);
       // Emit the log
@@ -211,20 +218,22 @@ class ReporterPlugin extends Tapable {
     const self = this;
     const hookStats = self.hookStats;
 
-    self.compilationHooks.forEach((hookName) => {
-      const hookId = `compilation.${hookName}`;
-      if (!hookStats.hasHook(hookId)) {
-        hookStats.initHook(hookId);
-      }
-      compilation.hooks[hookName].tap(self.REPORTER_PLUGIN, (data) => {
-        hookStats.incrementCount(hookId);
-        if (hookStats.shouldTrigger(hookId)) {
-          /* @type {HookData} */
-          const hookData = hookStats.generateHookData(hookId, data);
-          self.emitInfo(hookData);
+    for (const hookName in self.compilationHooks) {
+      if (self.compilationHooks[hookName]) {
+        const hookId = `compilation.${hookName}`;
+        if (!hookStats.hasHook(hookId)) {
+          hookStats.initHook(hookId);
         }
-      });
-    });
+        compilation.hooks[hookName].tap(self.REPORTER_PLUGIN, (data) => {
+          hookStats.incrementCount(hookId);
+          if (hookStats.shouldTrigger(hookId)) {
+            /* @type {HookData} */
+            const hookData = hookStats.generateHookData(hookId, data);
+            self.emitInfo(hookData);
+          }
+        });
+      }
+    };
   }
 }
 
@@ -241,6 +250,7 @@ ReporterPlugin.defaultOptions = {
   },
   reporters: [new Reporter()],
 };
+
 ReporterPlugin.Reporter = Reporter;
 
 class HookStats {
@@ -262,7 +272,7 @@ class HookStats {
     if (this.hooks[hookId]) {
       this.hooks[hookId].count += 1;
     } else {
-      console.error('WTFFFF');
+      console.error('WTFFFF', hookId);
     }
   }
 
@@ -297,6 +307,7 @@ class HookStats {
   hasHook(hookId) {
     return this.hooks[hookId] !== undefined;
   }
+
 
   /**
    * @param {string} hookId hook's id

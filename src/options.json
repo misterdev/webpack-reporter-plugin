@@ -7,7 +7,7 @@
         "description": "Define which hooks to listen at and the throttling",
         "type": "object",
         "additionalProperties": false,
-        "properties":{
+        "properties": {
           "defaults": {
             "description": "Wether or not listen to the default hooks",
             "type": "boolean"
