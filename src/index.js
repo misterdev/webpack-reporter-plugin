@@ -86,7 +86,7 @@ const compilationHooks = (selected) => ({
 });
 
 /**
- * @typedef { import("./Stats") } Stats
+ * @typedef {object} Stats -- TODO import from webpack
  *
  * @typedef {object} HookData - creates a new type named 'HookData'
  * @property {string} [context] - hook context
@@ -94,6 +94,7 @@ const compilationHooks = (selected) => ({
  * @property {number} count - number of times the hook is executed
  * @property {string} configHash - current webpack configuration hash
  * @property {Stats | string} [data] - custom hook data
+ * @property {number} lastCall -- last hook trigger timestamp
  */
 
 class HookStats {
@@ -187,6 +188,9 @@ class ReporterPlugin extends Tapable {
       /** @type {SyncWaterfallHook<HookData>} */
       stats: new SyncWaterfallHook(['stats']),
     };
+
+    this.compilerHooks = {};
+    this.compilationHooks = {};
 
     this.emitInfo = (hookData) => this.hooks.info.call(hookData);
     this.emitWarn = (hookData) => this.hooks.warn.call(hookData);
@@ -328,7 +332,7 @@ ReporterPlugin.defaultOptions = {
 
 ReporterPlugin.Reporter = Reporter;
 
-module.exports = ReporterPlugin;
+module.exports.de = ReporterPlugin;
 
 // this.compilationHook = [
 // 	"buildModule",
