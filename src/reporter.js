@@ -20,7 +20,7 @@ class Reporter {
 
     reporter.hooks.stats.tap('Reporter', (hookData) => {
       const statsString = hookData.data.toString(outputOptions);
-      // if (statsString) process.stdout.write(`${statsString}\n${"delimiter"}`);
+      if (statsString) process.stdout.write(`${statsString}\n${'delimiter'}`);
     });
   }
 

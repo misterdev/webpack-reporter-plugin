@@ -16,30 +16,28 @@ NEXT
 - formatting utility
 */
 
-'use strict';
-
 const validateOptions = require('schema-utils');
-const schema = require('./options.json');
 const { Tapable, SyncWaterfallHook } = require('tapable');
 
+const schema = require('./options.json');
 const Reporter = require('./reporter');
 
 const compilerHooks = (selected) => ({
-  'beforeRun': selected,
-  'run': selected,
-  'watchRun': selected,
-  'beforeCompile': selected,
-  'compile': selected,
-  'compilation': selected,
-  'emit': selected,
-  'done': selected,
-  'failed': selected,
-  'invalid': selected,
-  'watchClose': selected
+  beforeRun: selected,
+  run: selected,
+  watchRun: selected,
+  beforeCompile: selected,
+  compile: selected,
+  compilation: selected,
+  emit: selected,
+  done: selected,
+  failed: selected,
+  invalid: selected,
+  watchClose: selected,
 });
 
 const compilationHooks = (selected) => ({
-  'buildModule': selected,
+  buildModule: selected,
   // "finishModules": selected,
   // "seal": selected,
   // "beforeChunks": selected,
@@ -72,7 +70,7 @@ const compilationHooks = (selected) => ({
   // "recordModules": selected,
   // "recordChunks": selected,
   // "beforeHash": selected,
-  'contentHash': selected,
+  contentHash: selected,
   // "afterHash": selected,
   // "recordHash": selected,
   // "beforeModuleAssets": selected,
@@ -97,6 +95,82 @@ const compilationHooks = (selected) => ({
  * @property {string} configHash - current webpack configuration hash
  * @property {Stats | string} [data] - custom hook data
  */
+
+class HookStats {
+  constructor() {
+    this.hooks = {};
+  }
+
+  // TODO datatype
+  initHook(hookId, throttle) {
+    this.hooks[hookId] = {
+      name: hookId,
+      count: 0,
+      throttle,
+      lastCall: 0,
+    };
+  }
+
+  incrementCount(hookId) {
+    if (this.hooks[hookId]) {
+      this.hooks[hookId].count += 1;
+    } else {
+      console.error('WTFFFF', hookId);
+    }
+  }
+
+  /**
+   * @param {string} hookId hook's id
+   * @returns {boolean} false if it should be skiipped, true otherwise
+   */
+  shouldTrigger(hookId) {
+    const hook = this.hooks[hookId];
+    let shouldTrigger = true;
+
+    if (hook.throttle) {
+      if (typeof hook.throttle === 'number') {
+        shouldTrigger = hook.count % hook.throttle === 0;
+      } else if (
+        typeof hook.throttle === 'string' &&
+        hook.throttle.endsWith('ms')
+      ) {
+        const delta = parseInt(hook.throttle, 10);
+        const now = Date.now();
+        shouldTrigger = now - hook.lastCall >= delta;
+        // console.log(now, hook.lastCall, now - hook.lastCall, '>=', delta, shouldTrigger, hook.count)
+      }
+    }
+    return shouldTrigger;
+  }
+
+  /**
+   * @param {string} hookId hook's id
+   * @returns {boolean} true if the hook exists
+   */
+  hasHook(hookId) {
+    return this.hooks[hookId] !== undefined;
+  }
+
+  /**
+   * @param {string} hookId hook's id
+   * @param {Object} [data] custom hook data
+   * @returns {HookData} HookData
+   */
+  generateHookData(hookId, data) {
+    this.hooks[hookId].lastCall = Date.now();
+    // TODO check if exists
+    return {
+      // TODO
+      context: '/foo/bar',
+      hookId,
+      count: this.hooks[hookId].count,
+      // TODO
+      configHash: 'abcdefgh',
+      data,
+      lastCall: this.hooks[hookId].lastCall,
+    };
+  }
+}
 
 class ReporterPlugin extends Tapable {
   constructor(options = {}) {
@@ -140,7 +214,7 @@ class ReporterPlugin extends Tapable {
     if (compiler) {
       for (const hookName in compiler) {
         const throttle = compiler[hookName];
-        if (typeof throttle === "boolean") {
+        if (typeof throttle === 'boolean') {
           self.compilerHooks[hookName] = throttle;
         } else {
           const hookId = `compiler.${hookName}`;
@@ -152,7 +226,7 @@ class ReporterPlugin extends Tapable {
     if (compilation) {
       for (const hookName in compilation) {
         const throttle = compilation[hookName];
-        if (typeof throttle === "boolean") {
+        if (typeof throttle === 'boolean') {
           self.compilationHooks[hookName] = throttle;
         } else {
           const hookId = `compilation.${hookName}`;
@@ -164,10 +238,11 @@ class ReporterPlugin extends Tapable {
 
   apply(compiler) {
     const self = this;
-    const hookStats = self.hookStats;
+    const { hookStats } = self;
     // TODO remove hardcoded
     const outputOptions = compiler.options.stats || {
-      context: compiler.context, //TODO
+      // TODO
+      context: compiler.context,
       colors: { level: 3, hasBasic: true, has256: true, has16m: true },
       cached: false,
       cachedAssets: false,
@@ -184,15 +259,15 @@ class ReporterPlugin extends Tapable {
     );
 
     // Initialize compiler hooks
-    console.log(self.compilerHooks)
+    console.log(self.compilerHooks);
     for (const hookName in self.compilerHooks) {
       if (self.compilerHooks[hookName]) {
         const hookId = `compiler.${hookName}`;
-  
+
         if (!hookStats.hasHook(hookId)) {
           hookStats.initHook(hookId);
         }
-  
+
         // TODO handle args
         compiler.hooks[hookName].tap(self.REPORTER_PLUGIN, (...args) => {
           const hookData = hookStats.generateHookData(hookId);
@@ -216,7 +291,7 @@ class ReporterPlugin extends Tapable {
 
   onCompilation(compilation) {
     const self = this;
-    const hookStats = self.hookStats;
+    const { hookStats } = self;
 
     for (const hookName in self.compilationHooks) {
       if (self.compilationHooks[hookName]) {
@@ -233,7 +308,7 @@ class ReporterPlugin extends Tapable {
           }
         });
       }
-    };
+    }
   }
 }
 
@@ -241,92 +316,17 @@ ReporterPlugin.defaultOptions = {
   hooks: {
     defaults: true,
     compiler: {
-      done: true
+      done: true,
     },
     compilation: {
       buildModule: 5,
-      contentHash: '4ms'
-    }
+      contentHash: '4ms',
+    },
   },
   reporters: [new Reporter()],
 };
 
 ReporterPlugin.Reporter = Reporter;
-
-class HookStats {
-  constructor() {
-    this.hooks = {};
-  }
-
-  // TODO datatype
-  initHook(hookId, throttle) {
-    this.hooks[hookId] = {
-      name: hookId,
-      count: 0,
-      throttle,
-      lastCall: 0,
-    };
-  }
-
-  incrementCount(hookId) {
-    if (this.hooks[hookId]) {
-      this.hooks[hookId].count += 1;
-    } else {
-      console.error('WTFFFF', hookId);
-    }
-  }
-
-  /**
-   * @param {string} hookId hook's id
-   * @returns {boolean} false if it should be skiipped, true otherwise
-   */
-  shouldTrigger(hookId) {
-    const hook = this.hooks[hookId];
-    let shouldTrigger = true;
-
-    if (hook.throttle) {
-      if (typeof hook.throttle === 'number') {
-        shouldTrigger = hook.count % hook.throttle == 0;
-      } else if (
-        typeof hook.throttle === 'string' &&
-        hook.throttle.endsWith('ms')
-      ) {
-        const delta = parseInt(hook.throttle);
-        const now = Date.now();
-        shouldTrigger = now - hook.lastCall >= delta;
-        // console.log(now, hook.lastCall, now - hook.lastCall, '>=', delta, shouldTrigger, hook.count)
-      }
-    }
-    return shouldTrigger;
-  }
-
-  /**
-   * @param {string} hookId hook's id
-   * @returns {boolean} true if the hook exists
-   */
-  hasHook(hookId) {
-    return this.hooks[hookId] !== undefined;
-  }
-
-
-  /**
-   * @param {string} hookId hook's id
-   * @param {Object} [data] custom hook data
-   * @returns {HookData} HookData
-   */
-  generateHookData(hookId, data) {
-    this.hooks[hookId].lastCall = Date.now();
-    // TODO check if exists
-    return {
-      context: '/foo/bar', // TODO
-      hookId,
-      count: this.hooks[hookId].count,
-      configHash: 'abcdefgh', // TODO
-      data,
-      lastCall: this.hooks[hookId].lastCall,
-    };
-  }
-}
 
 module.exports = ReporterPlugin;
 
