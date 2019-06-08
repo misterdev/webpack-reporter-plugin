@@ -17,18 +17,16 @@ class Reporter {
   }
 
   apply(reporter, outputOptions) {
-    const self = this;
-    self.outputOptions = outputOptions;
+    this.outputOptions = outputOptions;
     // Adds a listener for a specific log
-    reporter.hooks.info.tap('Reporter', self.onInfo);
-    reporter.hooks.stats.tap('Reporter', self.onStats);
-    reporter.hooks.error.tap('Reporter', self.onError);
+    reporter.hooks.info.tap('Reporter', this.onInfo);
+    reporter.hooks.stats.tap('Reporter', this.onStats);
+    // reporter.hooks.error.tap('Reporter', this.onError);
   }
 
   onInfo(hookData) {
-    const self = this;
     // Formats and prints the output
-    self.incrementHookCounter(hookData.hookId);
+    this.incrementHookCounter(hookData.hookId);
     const time = new Date(hookData.lastCall);
     console.log(
       `[REPORTER]: ${hookData.hookId} ${
@@ -38,13 +36,11 @@ class Reporter {
   }
 
   onStats(hookData) {
-    const self = this;
-    const statsString = hookData.data.toString(self.outputOptions);
+    const statsString = hookData.data.toString(this.outputOptions);
     if (statsString) process.stdout.write(`${statsString}\n${'delimiter'}`);
   }
 
   onError(hookData) {
-    const self = this;
     console.error(chalk.red(`\n[REPORTER]:\n\n    ${hookData.data}\n`));
   }
 }

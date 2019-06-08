@@ -208,21 +208,20 @@ class ReporterPlugin extends Tapable {
   }
 
   parseHooksOption(hooksOptions) {
-    const self = this;
     // TODO remove defaults = true
     const { defaults = true, compiler, compilation } = hooksOptions;
 
-    self.compilerHooks = compilerHooks(defaults);
-    self.compilationHooks = compilationHooks(defaults);
+    this.compilerHooks = compilerHooks(defaults);
+    this.compilationHooks = compilationHooks(defaults);
 
     if (compiler) {
       for (const hookName in compiler) {
         const throttle = compiler[hookName];
         if (typeof throttle === 'boolean') {
-          self.compilerHooks[hookName] = throttle;
+          this.compilerHooks[hookName] = throttle;
         } else {
           const hookId = `compiler.${hookName}`;
-          self.hookStats.initHook(hookId, throttle);
+          this.hookStats.initHook(hookId, throttle);
         }
       }
     }
@@ -231,18 +230,17 @@ class ReporterPlugin extends Tapable {
       for (const hookName in compilation) {
         const throttle = compilation[hookName];
         if (typeof throttle === 'boolean') {
-          self.compilationHooks[hookName] = throttle;
+          this.compilationHooks[hookName] = throttle;
         } else {
           const hookId = `compilation.${hookName}`;
-          self.hookStats.initHook(hookId, throttle);
+          this.hookStats.initHook(hookId, throttle);
         }
       }
     }
   }
 
   apply(compiler) {
-    const self = this;
-    const { hookStats } = self;
+    const { hookStats } = this;
     // TODO remove hardcoded
     const outputOptions = compiler.options.stats || {
       // TODO
@@ -255,16 +253,16 @@ class ReporterPlugin extends Tapable {
     };
 
     // Initialize all the reporters
-    self.reporters.forEach((reporter) => reporter.apply(self, outputOptions));
+    this.reporters.forEach((reporter) => reporter.apply(this, outputOptions));
 
     // Initialize the compilation hooks
-    compiler.hooks.compilation.tap(self.REPORTER_PLUGIN, (compilation) =>
-      self.onCompilation(compilation)
+    compiler.hooks.compilation.tap(this.REPORTER_PLUGIN, (compilation) =>
+      this.onCompilation(compilation)
     );
 
     // Initialize compiler hooks
-    for (const hookName in self.compilerHooks) {
-      if (self.compilerHooks[hookName]) {
+    for (const hookName in this.compilerHooks) {
+      if (this.compilerHooks[hookName]) {
         const hookId = `compiler.${hookName}`;
 
         if (!hookStats.hasHook(hookId)) {
@@ -272,15 +270,15 @@ class ReporterPlugin extends Tapable {
         }
 
         // TODO handle args
-        compiler.hooks[hookName].tap(self.REPORTER_PLUGIN, (...args) => {
+        compiler.hooks[hookName].tap(this.REPORTER_PLUGIN, (...args) => {
           const hookData = hookStats.generateHookData(hookId);
           // Emit the log
-          self.emitInfo(hookData);
+          this.emitInfo(hookData);
         });
       }
     }
     // TODO settable
-    compiler.hooks.done.tap(self.REPORTER_PLUGIN, (stats) => {
+    compiler.hooks.done.tap(this.REPORTER_PLUGIN, (stats) => {
       const hookId = 'compiler.done';
       if (!hookStats.hasHook(hookId)) {
         hookStats.initHook(hookId);
@@ -288,9 +286,9 @@ class ReporterPlugin extends Tapable {
       /* @type {HookData} */
       const hookData = hookStats.generateHookData(hookId, stats);
       // Emit the log
-      self.emitStats(hookData);
+      this.emitStats(hookData);
     });
-    compiler.hooks.failed.tap(self.REPORTER_PLUGIN, (err) => {
+    compiler.hooks.failed.tap(this.REPORTER_PLUGIN, (err) => {
       const hookId = 'compiler.failed';
       if (!hookStats.hasHook(hookId)) {
         hookStats.initHook(hookId);
@@ -298,26 +296,25 @@ class ReporterPlugin extends Tapable {
       /* @type {HookData} */
       const hookData = hookStats.generateHookData(hookId, err);
       // Emit the log
-      self.emitError(hookData);
+      this.emitError(hookData);
     });
   }
 
   onCompilation(compilation) {
-    const self = this;
-    const { hookStats } = self;
+    const { hookStats } = this;
 
-    for (const hookName in self.compilationHooks) {
-      if (self.compilationHooks[hookName]) {
+    for (const hookName in this.compilationHooks) {
+      if (this.compilationHooks[hookName]) {
         const hookId = `compilation.${hookName}`;
         if (!hookStats.hasHook(hookId)) {
           hookStats.initHook(hookId);
         }
-        compilation.hooks[hookName].tap(self.REPORTER_PLUGIN, (data) => {
+        compilation.hooks[hookName].tap(this.REPORTER_PLUGIN, (data) => {
           hookStats.incrementCount(hookId);
           if (hookStats.shouldTrigger(hookId)) {
             /* @type {HookData} */
             const hookData = hookStats.generateHookData(hookId, data);
-            self.emitInfo(hookData);
+            this.emitInfo(hookData);
           }
         });
       }
