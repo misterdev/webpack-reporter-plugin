@@ -192,6 +192,8 @@ class ReporterPlugin extends Tapable {
     this.compilerHooks = {};
     this.compilationHooks = {};
 
+    this.onStats = this.onStats.bind(this);
+
     this.emitInfo = (hookData) => this.hooks.info.call(hookData);
     this.emitWarn = (hookData) => this.hooks.warn.call(hookData);
     this.emitError = (hookData) => this.hooks.error.call(hookData);
@@ -201,6 +203,7 @@ class ReporterPlugin extends Tapable {
     this.hookStats = new HookStats();
 
     validateOptions(schema, options, 'Reporter Plugin');
+    // TODO improve this default assignment
     this.options = Object.assign({}, ReporterPlugin.defaultOptions, options);
     this.reporters = this.options.reporters;
 
@@ -243,7 +246,6 @@ class ReporterPlugin extends Tapable {
     const { hookStats } = this;
     // TODO remove hardcoded
     const outputOptions = compiler.options.stats || {
-      // TODO
       context: compiler.context,
       colors: { level: 3, hasBasic: true, has256: true, has16m: true },
       cached: false,
@@ -277,17 +279,9 @@ class ReporterPlugin extends Tapable {
         });
       }
     }
-    // TODO settable
-    compiler.hooks.done.tap(this.REPORTER_PLUGIN, (stats) => {
-      const hookId = 'compiler.done';
-      if (!hookStats.hasHook(hookId)) {
-        hookStats.initHook(hookId);
-      }
-      /* @type {HookData} */
-      const hookData = hookStats.generateHookData(hookId, stats);
-      // Emit the log
-      this.emitStats(hookData);
-    });
+    // TODO those should be configurable
+    compiler.hooks.done.tap(this.REPORTER_PLUGIN, this.onStats);
+
     compiler.hooks.failed.tap(this.REPORTER_PLUGIN, (err) => {
       const hookId = 'compiler.failed';
       if (!hookStats.hasHook(hookId)) {
@@ -319,6 +313,36 @@ class ReporterPlugin extends Tapable {
         });
       }
     }
+  }
+
+  onStats(stats) {
+    const { hookStats } = this;
+
+    const hookId = 'compiler.done';
+    if (!hookStats.hasHook(hookId)) {
+      hookStats.initHook(hookId);
+    }
+
+    // TODO is this the same as?
+    // if (stats.compilation && stats.compilation.errors.length !== 0) {
+    if (stats.hasErrors()) {
+      stats.compilation.errors.forEach((err) => {
+        const hookData = hookStats.generateHookData(hookId, err);
+        this.emitError(hookData);
+      });
+    }
+
+    if (stats.hasWarnings()) {
+      stats.compilation.warnings.forEach((warn) => {
+        const hookData = hookStats.generateHookData(hookId, warn);
+        this.emitWarn(hookData);
+      });
+    }
+
+    /* @type {HookData} */
+    const hookData = hookStats.generateHookData(hookId, stats);
+    // Emit the log
+    this.emitStats(hookData);
   }
 }
 

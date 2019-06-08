@@ -9,6 +9,7 @@ class Reporter {
     this.onInfo = this.onInfo.bind(this);
     this.onStats = this.onStats.bind(this);
     this.onError = this.onError.bind(this);
+    this.onWarning = this.onWarning.bind(this);
   }
 
   incrementHookCounter(hookName) {
@@ -21,7 +22,8 @@ class Reporter {
     // Adds a listener for a specific log
     reporter.hooks.info.tap('Reporter', this.onInfo);
     reporter.hooks.stats.tap('Reporter', this.onStats);
-    // reporter.hooks.error.tap('Reporter', this.onError);
+    reporter.hooks.error.tap('Reporter', this.onError);
+    reporter.hooks.warn.tap('Reporter', this.onWarning);
   }
 
   onInfo(hookData) {
@@ -37,11 +39,18 @@ class Reporter {
 
   onStats(hookData) {
     const statsString = hookData.data.toString(this.outputOptions);
-    if (statsString) process.stdout.write(`${statsString}\n${'delimiter'}`);
+    const delimiter = this.outputOptions.buildDelimiter
+      ? `${this.outputOptions.buildDelimiter}\n`
+      : '';
+    // if (statsString) process.stdout.write(`${statsString}\n${delimiter}`);
   }
 
   onError(hookData) {
     console.error(chalk.red(`\n[REPORTER]:\n\n    ${hookData.data}\n`));
+  }
+
+  onWarning(hookData) {
+    console.error(chalk.yellow(`\n[REPORTER]:\n\n    ${hookData.data}\n`));
   }
 }
 
