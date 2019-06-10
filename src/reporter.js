@@ -1,5 +1,3 @@
-const chalk = require('chalk');
-
 class Reporter {
   constructor() {
     // Init counters
@@ -33,7 +31,9 @@ class Reporter {
     console.log(
       `[REPORTER]: ${hookData.hookId} ${
         this.counter[hookData.hookId]
-      } -- ${time.getMinutes()}:${time.getSeconds()}:${time.getMilliseconds()} `
+      } -- ${time.getMinutes()}:${time.getSeconds()}:${time.getMilliseconds()} ${
+        hookData.context
+      }`
     );
   }
 
@@ -46,11 +46,13 @@ class Reporter {
   }
 
   onError(hookData) {
-    console.error(chalk.red(`\n[REPORTER]:\n\n    ${hookData.data}\n`));
+    console.error(`\u001B[31m\n[REPORTER]:\n\n    ${hookData.data}\n\u001B[0m`);
   }
 
   onWarning(hookData) {
-    console.error(chalk.yellow(`\n[REPORTER]:\n\n    ${hookData.data}\n`));
+    console.error(
+      `\u001B[$33m\n[REPORTER]:\n\n    ${hookData.data}\n\u001B[0m`
+    );
   }
 }
 
