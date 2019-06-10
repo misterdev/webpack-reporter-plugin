@@ -3,19 +3,6 @@ MIT License http://www.opensource.org/licenses/mit-license.php
 Author Devid Farinelli @misterdev
 */
 
-/*
-TODO
-- multicompiler
-
-HOOK THROTTLING
-- always includes first and last within same threshold
-
-NEXT
-- hook order
-- benchmarks
-- formatting utility
-*/
-
 const validateOptions = require('schema-utils');
 const { Tapable, SyncWaterfallHook } = require('tapable');
 
@@ -122,7 +109,7 @@ class HookStats {
 
   /**
    * @param {string} hookId hook's id
-   * @returns {boolean} false if it should be skiipped, true otherwise
+   * @returns {boolean} false if it should be skipped, true otherwise
    */
   shouldTrigger(hookId) {
     const hook = this.hooks[hookId];
@@ -138,7 +125,6 @@ class HookStats {
         const delta = parseInt(hook.throttle, 10);
         const now = Date.now();
         shouldTrigger = now - hook.lastCall >= delta;
-        // console.log(now, hook.lastCall, now - hook.lastCall, '>=', delta, shouldTrigger, hook.count)
       }
     }
     return shouldTrigger;
@@ -203,8 +189,28 @@ class ReporterPlugin extends Tapable {
     this.hookStats = new HookStats();
 
     validateOptions(schema, options, 'Reporter Plugin');
-    // TODO improve this default assignment
-    this.options = Object.assign({}, ReporterPlugin.defaultOptions, options);
+    // TODO a really ugly but working way of defaulting options
+    const defaults = ReporterPlugin.defaultOptions;
+    this.options = Object.assign({}, defaults, options);
+    const { hooks } = options;
+    if (hooks) {
+      this.options.hooks = Object.assign({}, defaults.hooks, options.hooks);
+      if (hooks.compiler) {
+        this.options.hooks.compiler = Object.assign(
+          {},
+          defaults.hooks.compiler,
+          hooks.compiler
+        );
+      }
+      if (hooks.compilation) {
+        this.options.hooks.compilation = Object.assign(
+          {},
+          defaults.hooks.compilation,
+          hooks.compilation
+        );
+      }
+    }
+
     this.reporters = this.options.reporters;
 
     this.parseHooksOption(this.options.hooks);
@@ -363,36 +369,3 @@ ReporterPlugin.defaultOptions = {
 ReporterPlugin.Reporter = Reporter;
 
 module.exports = ReporterPlugin;
-
-// this.compilationHook = [
-// 	"buildModule",
-// 	"rebuildModule",
-// 	"failedModule",
-// 	"succeedModule",
-// 	"finishModules",
-// 	"seal",
-// 	"unseal",
-// 	"optimizeDependencies",
-// 	"afterOptimizeDependencies",
-// 	"optimize",
-// 	"optimizeModules",
-// 	"afterOptimizeModules",
-// 	"optimizeChunks",
-// 	"afterOptimizeChunks",
-// 	"optimizeTree",
-// 	"afterOptimizeTree",
-// 	"optimizeChunkModules",
-// 	"afterOptimizeChunkModules",
-// 	"moduleIds",
-// 	"optimizeModuleIds",
-// 	"afterOptimizeModuleIds",
-// 	"chunkIds",
-// 	"optimizeChunkIds",
-// 	"afterOptimizeChunkIds",
-// 	"beforeModuleHash",
-// 	"afterModuleHash",
-// 	"record",
-// 	"optimizeChunkAssets",
-// 	"afterOptimizeChunkAssets",
-// 	"moduleAsset"
-// ];
