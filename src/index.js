@@ -79,7 +79,6 @@ const compilationHooks = (selected) => ({
  * @property {string} [context] - hook context
  * @property {string} hookId - hook's id
  * @property {number} count - number of times the hook is executed
- * @property {string} configHash - current webpack configuration hash
  * @property {Stats | string} [data] - custom hook data
  * @property {number} lastCall -- last hook trigger timestamp
  */
@@ -87,6 +86,10 @@ const compilationHooks = (selected) => ({
 class HookStats {
   constructor() {
     this.hooks = {};
+  }
+
+  setContext(context) {
+    this.context = context;
   }
 
   // TODO datatype
@@ -145,16 +148,14 @@ class HookStats {
    */
   generateHookData(hookId, data) {
     this.hooks[hookId].lastCall = Date.now();
+    const { count, lastCall } = this.hooks[hookId];
     // TODO check if exists
     return {
-      // TODO
-      context: '/foo/bar',
+      context: this.context,
       hookId,
-      count: this.hooks[hookId].count,
-      // TODO
-      configHash: 'abcdefgh',
+      count,
       data,
-      lastCall: this.hooks[hookId].lastCall,
+      lastCall,
     };
   }
 }
@@ -250,6 +251,8 @@ class ReporterPlugin extends Tapable {
 
   apply(compiler) {
     const { hookStats } = this;
+
+    this.hookStats.setContext(compiler.context);
     // TODO remove hardcoded
     const outputOptions = compiler.options.stats || {
       context: compiler.context,
