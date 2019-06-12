@@ -155,7 +155,7 @@ class ReporterPlugin extends Tapable {
 
     // if the user gave
     if (compiler) {
-      for (const hookName in compiler) {
+      Object.keys(compiler).forEach((hookName) => {
         const throttle = compiler[hookName];
         // if the value is boolean just enable/disable the hook
         if (typeof throttle === 'boolean') {
@@ -165,11 +165,11 @@ class ReporterPlugin extends Tapable {
           const hookId = `compiler.${hookName}`;
           this.hookStats.initHook(hookId, throttle);
         }
-      }
+      });
     }
 
     if (compilation) {
-      for (const hookName in compilation) {
+      Object.keys(compilation).forEach((hookName) => {
         const throttle = compilation[hookName];
         if (typeof throttle === 'boolean') {
           this.compilationHooks[hookName] = throttle;
@@ -177,7 +177,7 @@ class ReporterPlugin extends Tapable {
           const hookId = `compilation.${hookName}`;
           this.hookStats.initHook(hookId, throttle);
         }
-      }
+      });
     }
   }
 
@@ -197,16 +197,14 @@ class ReporterPlugin extends Tapable {
     );
 
     // Initialize compiler hooks
-    for (const hookName in this.compilerHooks) {
+    Object.keys(this.compilerHooks).forEach((hookName) => {
       // If the hook is enabled
       if (this.compilerHooks[hookName]) {
         const hookId = `compiler.${hookName}`;
+        const hook = compiler.hooks[hookName];
         // If the hook exist
-        if (compiler.hooks[hookName]) {
-          compiler.hooks[hookName].tap(
-            REPORTER_PLUGIN,
-            this.hookHandler(hookId)
-          );
+        if (hook) {
+          hook.tap(REPORTER_PLUGIN, this.hookHandler(hookId));
         } else {
           // TODO pass it to the Reporter?
           console.error(
@@ -216,19 +214,17 @@ class ReporterPlugin extends Tapable {
           );
         }
       }
-    }
+    });
   }
 
   applyCompilation(compilation) {
     for (const hookName in this.compilationHooks) {
       if (this.compilationHooks[hookName]) {
         const hookId = `compilation.${hookName}`;
+        const hook = compilation.hooks[hookName];
 
-        if (compilation.hooks[hookName]) {
-          compilation.hooks[hookName].tap(
-            REPORTER_PLUGIN,
-            this.hookHandler(hookId)
-          );
+        if (hook) {
+          hook.tap(REPORTER_PLUGIN, this.hookHandler(hookId));
         } else {
           console.log(
             this.formatter.red(
