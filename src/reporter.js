@@ -17,6 +17,7 @@ class Reporter {
 
   apply(reporter, outputOptions) {
     this.outputOptions = outputOptions;
+    this.style = reporter.formatter;
     // Adds a listener for a specific log
     reporter.hooks.info.tap('Reporter', this.onInfo);
     reporter.hooks.stats.tap('Reporter', this.onStats);
@@ -25,13 +26,16 @@ class Reporter {
   }
 
   onInfo(hookData) {
+    const { blue, yellow, green } = this.style;
     // Formats and prints the output
     this.incrementHookCounter(hookData.hookId);
-    const time = new Date(hookData.lastCall);
+    const date = new Date(hookData.lastCall);
+    const time = `${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()}`;
+
     console.log(
-      `\u001B[34m[REPORTER]:\u001B[0m ${time.getMinutes()}:${time.getSeconds()}:${time.getMilliseconds()}\u001B[32m ${
-        hookData.hookId
-      } \u001B[33m${this.counter[hookData.hookId]}\u001B[0m`
+      `${blue('[REPORTER]')} ${time} ${green(hookData.hookId)} ${yellow(
+        this.counter[hookData.hookId]
+      )}`
     );
   }
 
@@ -44,11 +48,13 @@ class Reporter {
   }
 
   onError(hookData) {
-    console.error(`\u001B[31m\n[REPORTER]:\n\n    ${hookData.data}\n\u001B[0m`);
+    console.error(this.style.red(`\n[REPORTER]:\n\n    ${hookData.data}\n`));
   }
 
   onWarning(hookData) {
-    console.error(`\u001B[33m\n[REPORTER]:\n\n    ${hookData.data}\n\u001B[0m`);
+    console.error(
+      this.style.yellow(`\n[REPORTER]:\n\n    ${hookData.data}\n\u001B[0m`)
+    );
   }
 }
 
