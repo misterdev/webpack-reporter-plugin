@@ -88,7 +88,6 @@ class ReporterPlugin extends Tapable {
   constructor(options = {}) {
     super();
     this.REPORTER_PLUGIN = 'ReporterPlugin';
-    this.formatter = new Formatter();
 
     this.hooks = Object.freeze({
       /** @type {SyncWaterfallHook<HookData>} */
@@ -101,45 +100,52 @@ class ReporterPlugin extends Tapable {
       stats: new SyncWaterfallHook(['stats']),
     });
 
-    this.compilerHooks = {};
-    this.compilationHooks = {};
-
-    this.onStats = this.onStats.bind(this);
-
     this.emitInfo = (hookData) => this.hooks.info.call(hookData);
     this.emitWarn = (hookData) => this.hooks.warn.call(hookData);
     this.emitError = (hookData) => this.hooks.error.call(hookData);
     this.emitStats = (hookData) => this.hooks.stats.call(hookData);
 
+    this.onCompilerDone = this.onCompilerDone.bind(this);
+
+    this.compilerHooks = {};
+    this.compilationHooks = {};
+
     /** @type {HookStats} */
     this.hookStats = new HookStats();
+    /** @type {Formatter} */
+    this.formatter = new Formatter();
 
     validateOptions(schema, options, 'Reporter Plugin');
+    this.options = this.defaultOptions(options);
+
+    this.reporters = this.options.reporters;
+
+    this.parseHooksOption(this.options.hooks);
+  }
+
+  defaultOptions(options) {
     // TODO a really ugly but working way of defaulting options
     const defaults = ReporterPlugin.defaultOptions;
-    this.options = Object.assign({}, defaults, options);
+    const result = Object.assign({}, defaults, options);
     const { hooks } = options;
     if (hooks) {
-      this.options.hooks = Object.assign({}, defaults.hooks, options.hooks);
+      result.hooks = Object.assign({}, defaults.hooks, options.hooks);
       if (hooks.compiler) {
-        this.options.hooks.compiler = Object.assign(
+        result.hooks.compiler = Object.assign(
           {},
           defaults.hooks.compiler,
           hooks.compiler
         );
       }
       if (hooks.compilation) {
-        this.options.hooks.compilation = Object.assign(
+        result.hooks.compilation = Object.assign(
           {},
           defaults.hooks.compilation,
           hooks.compilation
         );
       }
     }
-
-    this.reporters = this.options.reporters;
-
-    this.parseHooksOption(this.options.hooks);
+    return result;
   }
 
   parseHooksOption(hooksOptions) {
@@ -193,7 +199,7 @@ class ReporterPlugin extends Tapable {
 
     // Initialize the compilation hooks
     compiler.hooks.compilation.tap(this.REPORTER_PLUGIN, (compilation) =>
-      this.onCompilation(compilation)
+      this.applyCompilation(compilation)
     );
 
     // Initialize compiler hooks
@@ -201,78 +207,67 @@ class ReporterPlugin extends Tapable {
       if (this.compilerHooks[hookName]) {
         const hookId = `compiler.${hookName}`;
 
-        if (!hookStats.hasHook(hookId)) {
-          hookStats.initHook(hookId);
-        }
-
         if (compiler.hooks[hookName]) {
-          // TODO handle args
-          compiler.hooks[hookName].tap(this.REPORTER_PLUGIN, (...args) => {
-            const hookData = hookStats.generateHookData(hookId);
-            // Emit the log
-            this.emitInfo(hookData);
-          });
+          compiler.hooks[hookName].tap(
+            this.REPORTER_PLUGIN,
+            this.hookHandler(hookId)
+          );
         } else {
           console.error(
-            `\u001B[31m[ERROR] Error: The "${hookId}" hook does not exists \u001B[0m`
+            this.formatter.red(`Error: The "${hookId}" hook does not exists`)
           );
         }
       }
     }
-    // TODO those should be configurable
-    compiler.hooks.done.tap(this.REPORTER_PLUGIN, this.onStats);
-
-    compiler.hooks.failed.tap(this.REPORTER_PLUGIN, (err) => {
-      const hookId = 'compiler.failed';
-      if (!hookStats.hasHook(hookId)) {
-        hookStats.initHook(hookId);
-      }
-      /* @type {HookData} */
-      const hookData = hookStats.generateHookData(hookId, err);
-      // Emit the log
-      this.emitError(hookData);
-    });
   }
 
-  onCompilation(compilation) {
+  applyCompilation(compilation) {
     const { hookStats } = this;
 
     for (const hookName in this.compilationHooks) {
       if (this.compilationHooks[hookName]) {
         const hookId = `compilation.${hookName}`;
-        if (!hookStats.hasHook(hookId)) {
-          hookStats.initHook(hookId);
-        }
 
         if (compilation.hooks[hookName]) {
-          // TODO handle args
-          compilation.hooks[hookName].tap(this.REPORTER_PLUGIN, (data) => {
-            hookStats.incrementCount(hookId);
-            if (hookStats.shouldTrigger(hookId)) {
-              /* @type {HookData} */
-              const hookData = hookStats.generateHookData(hookId, data);
-              this.emitInfo(hookData);
-            }
-          });
+          compilation.hooks[hookName].tap(
+            this.REPORTER_PLUGIN,
+            this.hookHandler(hookId)
+          );
         } else {
           console.log(
-            `\u001B[31m[ERROR] Error: The "${hookId}" hook does not exists \u001B[0m`
+            this.formatter.red(
+              `[ERROR] Error: The "${hookId}" hook does not exists`
+            )
           );
         }
       }
     }
   }
 
-  onStats(stats) {
+  hookHandler(hookId) {
     const { hookStats } = this;
-
-    const hookId = 'compiler.done';
+    const handler = {
+      'compiler.done': this.onCompilerDone,
+      'compiler.failed': this.onCompilerFailed,
+      default: (...args) => {
+        hookStats.incrementCount(hookId);
+        if (hookStats.shouldTrigger(hookId)) {
+          /* @type {HookData} */
+          const hookData = hookStats.generateHookData(hookId, args);
+          this.emitInfo(hookData);
+        }
+      },
+    };
     if (!hookStats.hasHook(hookId)) {
       hookStats.initHook(hookId);
     }
+    return handler[hookId] || handler.default;
+  }
 
-    // TODO is this the same as?
-    // if (stats.compilation && stats.compilation.errors.length !== 0) {
+  onCompilerDone(stats) {
+    const { hookStats } = this;
+    const hookId = 'compiler.done';
+
     if (stats.hasErrors()) {
       stats.compilation.errors.forEach((err) => {
         const hookData = hookStats.generateHookData(hookId, err);
@@ -291,6 +286,14 @@ class ReporterPlugin extends Tapable {
     const hookData = hookStats.generateHookData(hookId, stats);
     // Emit the log
     this.emitStats(hookData);
+  }
+
+  onCompilerFailed(err) {
+    const hookId = 'compiler.failed';
+    /* @type {HookData} */
+    const hookData = this.hookStats.generateHookData(hookId, err);
+    // Emit the log
+    this.emitError(hookData);
   }
 }
 
