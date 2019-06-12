@@ -29,9 +29,9 @@ const compilationHooks = (selected) => ({
   seal: selected,
   beforeChunks: selected,
   afterChunks: selected,
-  optimizeDependenciesBasic: selected,
+  // optimizeDependenciesBasic: selected, // DEPRECATED v5
   optimizeDependencies: selected,
-  optimizeDependenciesAdvanced: selected,
+  // optimizeDependenciesAdvanced: selected, // DEPRECATED v5
   afterOptimizeDependencies: selected,
   optimize: selected,
   optimizeModules: selected,
@@ -43,14 +43,14 @@ const compilationHooks = (selected) => ({
   optimizeChunkModules: selected,
   afterOptimizeChunkModules: selected,
   reviveModules: selected,
-  optimizeModuleOrder: selected,
-  advancedOptimizeModuleOrder: selected,
+  // optimizeModuleOrder: selected, // DEPRECATED v5
+  // advancedOptimizeModuleOrder: selected, // DEPRECATED v5
   beforeModuleIds: selected,
   moduleIds: selected,
   optimizeModuleIds: selected,
   afterOptimizeModuleIds: selected,
   reviveChunks: selected,
-  optimizeChunkOrder: selected,
+  // optimizeChunkOrder: selected, // DEPRECATED v5
   beforeChunkIds: selected,
   optimizeChunkIds: selected,
   afterOptimizeChunkIds: selected,
@@ -165,7 +165,7 @@ class ReporterPlugin extends Tapable {
     super();
     this.REPORTER_PLUGIN = 'ReporterPlugin';
 
-    this.hooks = {
+    this.hooks = Object.freeze({
       /** @type {SyncWaterfallHook<HookData>} */
       info: new SyncWaterfallHook(['info']),
       /** @type {SyncWaterfallHook<HookData>} */
@@ -174,7 +174,7 @@ class ReporterPlugin extends Tapable {
       error: new SyncWaterfallHook(['error']),
       /** @type {SyncWaterfallHook<HookData>} */
       stats: new SyncWaterfallHook(['stats']),
-    };
+    });
 
     this.compilerHooks = {};
     this.compilationHooks = {};
@@ -280,12 +280,18 @@ class ReporterPlugin extends Tapable {
           hookStats.initHook(hookId);
         }
 
-        // TODO handle args
-        compiler.hooks[hookName].tap(this.REPORTER_PLUGIN, (...args) => {
-          const hookData = hookStats.generateHookData(hookId);
-          // Emit the log
-          this.emitInfo(hookData);
-        });
+        if (compiler.hooks[hookName]) {
+          // TODO handle args
+          compiler.hooks[hookName].tap(this.REPORTER_PLUGIN, (...args) => {
+            const hookData = hookStats.generateHookData(hookId);
+            // Emit the log
+            this.emitInfo(hookData);
+          });
+        } else {
+          console.error(
+            `\u001B[31m[ERROR] Error: The "${hookId}" hook does not exists \u001B[0m`
+          );
+        }
       }
     }
     // TODO those should be configurable
@@ -312,14 +318,22 @@ class ReporterPlugin extends Tapable {
         if (!hookStats.hasHook(hookId)) {
           hookStats.initHook(hookId);
         }
-        compilation.hooks[hookName].tap(this.REPORTER_PLUGIN, (data) => {
-          hookStats.incrementCount(hookId);
-          if (hookStats.shouldTrigger(hookId)) {
-            /* @type {HookData} */
-            const hookData = hookStats.generateHookData(hookId, data);
-            this.emitInfo(hookData);
-          }
-        });
+
+        if (compilation.hooks[hookName]) {
+          // TODO handle args
+          compilation.hooks[hookName].tap(this.REPORTER_PLUGIN, (data) => {
+            hookStats.incrementCount(hookId);
+            if (hookStats.shouldTrigger(hookId)) {
+              /* @type {HookData} */
+              const hookData = hookStats.generateHookData(hookId, data);
+              this.emitInfo(hookData);
+            }
+          });
+        } else {
+          console.log(
+            `\u001B[31m[ERROR] Error: The "${hookId}" hook does not exists \u001B[0m`
+          );
+        }
       }
     }
   }
