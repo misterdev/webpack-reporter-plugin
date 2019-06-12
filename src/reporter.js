@@ -29,11 +29,9 @@ class Reporter {
     this.incrementHookCounter(hookData.hookId);
     const time = new Date(hookData.lastCall);
     console.log(
-      `[REPORTER]: ${hookData.hookId} ${
-        this.counter[hookData.hookId]
-      } -- ${time.getMinutes()}:${time.getSeconds()}:${time.getMilliseconds()} ${
-        hookData.context
-      }`
+      `\u001B[34m[REPORTER]:\u001B[0m ${time.getMinutes()}:${time.getSeconds()}:${time.getMilliseconds()}\u001B[32m ${
+        hookData.hookId
+      } \u001B[33m${this.counter[hookData.hookId]}\u001B[0m`
     );
   }
 
@@ -50,9 +48,7 @@ class Reporter {
   }
 
   onWarning(hookData) {
-    console.error(
-      `\u001B[$33m\n[REPORTER]:\n\n    ${hookData.data}\n\u001B[0m`
-    );
+    console.error(`\u001B[33m\n[REPORTER]:\n\n    ${hookData.data}\n\u001B[0m`);
   }
 }
 
