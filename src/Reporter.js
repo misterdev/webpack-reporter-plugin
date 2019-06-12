@@ -33,7 +33,7 @@ class Reporter {
     const time = `${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()}`;
 
     console.log(
-      `${blue('[REPORTER]')} ${time} ${green(hookData.hookId)} ${yellow(
+      `${blue('[Reporter]')} ${time} ${green(hookData.hookId)} ${yellow(
         this.counter[hookData.hookId]
       )}`
     );
@@ -48,12 +48,12 @@ class Reporter {
   }
 
   onError(hookData) {
-    console.error(this.style.red(`\n[REPORTER]:\n\n    ${hookData.data}\n`));
+    console.error(this.style.red(`\n[Reporter]:\n\n    ${hookData.data}\n`));
   }
 
   onWarning(hookData) {
     console.error(
-      this.style.yellow(`\n[REPORTER]:\n\n    ${hookData.data}\n\u001B[0m`)
+      this.style.yellow(`\n[Reporter]:\n\n    ${hookData.data}\n\u001B[0m`)
     );
   }
 }

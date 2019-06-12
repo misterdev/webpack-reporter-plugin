@@ -11,6 +11,8 @@ const Reporter = require('./Reporter');
 const Formatter = require('./Formatter');
 const HookStats = require('./HookStats');
 
+const REPORTER_PLUGIN = 'ReporterPlugin';
+
 const compilerHooks = (selected) => ({
   beforeRun: selected,
   run: selected,
@@ -87,7 +89,6 @@ const compilationHooks = (selected) => ({
 class ReporterPlugin extends Tapable {
   constructor(options = {}) {
     super();
-    this.REPORTER_PLUGIN = 'ReporterPlugin';
 
     this.hooks = Object.freeze({
       /** @type {SyncWaterfallHook<HookData>} */
@@ -104,8 +105,6 @@ class ReporterPlugin extends Tapable {
     this.emitWarn = (hookData) => this.hooks.warn.call(hookData);
     this.emitError = (hookData) => this.hooks.error.call(hookData);
     this.emitStats = (hookData) => this.hooks.stats.call(hookData);
-
-    this.onCompilerDone = this.onCompilerDone.bind(this);
 
     this.compilerHooks = {};
     this.compilationHooks = {};
@@ -149,18 +148,20 @@ class ReporterPlugin extends Tapable {
   }
 
   parseHooksOption(hooksOptions) {
-    // TODO remove defaults = true
-    const { defaults = true, compiler, compilation } = hooksOptions;
+    const { defaults, compiler, compilation } = hooksOptions;
 
     this.compilerHooks = compilerHooks(defaults);
     this.compilationHooks = compilationHooks(defaults);
 
+    // if the user gave
     if (compiler) {
       for (const hookName in compiler) {
         const throttle = compiler[hookName];
+        // if the value is boolean just enable/disable the hook
         if (typeof throttle === 'boolean') {
           this.compilerHooks[hookName] = throttle;
         } else {
+          // if the value is number/string set the throttling
           const hookId = `compiler.${hookName}`;
           this.hookStats.initHook(hookId, throttle);
         }
@@ -181,40 +182,37 @@ class ReporterPlugin extends Tapable {
   }
 
   apply(compiler) {
-    const { hookStats } = this;
-
     this.hookStats.setContext(compiler.context);
     // TODO remove hardcoded
     const outputOptions = compiler.options.stats || {
-      context: compiler.context,
-      colors: { level: 3, hasBasic: true, has256: true, has16m: true },
-      cached: false,
-      cachedAssets: false,
-      exclude: ['node_modules', 'bower_components', 'components'],
-      infoVerbosity: 'info',
+      colors: true,
     };
 
     // Initialize all the reporters
     this.reporters.forEach((reporter) => reporter.apply(this, outputOptions));
 
     // Initialize the compilation hooks
-    compiler.hooks.compilation.tap(this.REPORTER_PLUGIN, (compilation) =>
+    compiler.hooks.compilation.tap(REPORTER_PLUGIN, (compilation) =>
       this.applyCompilation(compilation)
     );
 
     // Initialize compiler hooks
     for (const hookName in this.compilerHooks) {
+      // If the hook is enabled
       if (this.compilerHooks[hookName]) {
         const hookId = `compiler.${hookName}`;
-
+        // If the hook exist
         if (compiler.hooks[hookName]) {
           compiler.hooks[hookName].tap(
-            this.REPORTER_PLUGIN,
+            REPORTER_PLUGIN,
             this.hookHandler(hookId)
           );
         } else {
+          // TODO pass it to the Reporter?
           console.error(
-            this.formatter.red(`Error: The "${hookId}" hook does not exists`)
+            this.formatter.red(
+              `[ReporterPlugin] Error: The "${hookId}" hook does not exists`
+            )
           );
         }
       }
@@ -222,21 +220,19 @@ class ReporterPlugin extends Tapable {
   }
 
   applyCompilation(compilation) {
-    const { hookStats } = this;
-
     for (const hookName in this.compilationHooks) {
       if (this.compilationHooks[hookName]) {
         const hookId = `compilation.${hookName}`;
 
         if (compilation.hooks[hookName]) {
           compilation.hooks[hookName].tap(
-            this.REPORTER_PLUGIN,
+            REPORTER_PLUGIN,
             this.hookHandler(hookId)
           );
         } else {
           console.log(
             this.formatter.red(
-              `[ERROR] Error: The "${hookId}" hook does not exists`
+              `[ReporterPlugin] Error: The "${hookId}" hook does not exists`
             )
           );
         }
@@ -247,7 +243,7 @@ class ReporterPlugin extends Tapable {
   hookHandler(hookId) {
     const { hookStats } = this;
     const handler = {
-      'compiler.done': this.onCompilerDone,
+      'compiler.done': this.onCompilerDone.bind(this),
       'compiler.failed': this.onCompilerFailed,
       default: (...args) => {
         hookStats.incrementCount(hookId);
@@ -258,6 +254,7 @@ class ReporterPlugin extends Tapable {
         }
       },
     };
+
     if (!hookStats.hasHook(hookId)) {
       hookStats.initHook(hookId);
     }
@@ -282,18 +279,26 @@ class ReporterPlugin extends Tapable {
       });
     }
 
-    /* @type {HookData} */
-    const hookData = hookStats.generateHookData(hookId, stats);
-    // Emit the log
-    this.emitStats(hookData);
+    hookStats.incrementCount(hookId);
+    if (hookStats.shouldTrigger(hookId)) {
+      /* @type {HookData} */
+      const hookData = hookStats.generateHookData(hookId, stats);
+      this.emitInfo(hookData);
+      this.emitStats(hookData);
+    }
   }
 
   onCompilerFailed(err) {
     const hookId = 'compiler.failed';
-    /* @type {HookData} */
-    const hookData = this.hookStats.generateHookData(hookId, err);
-    // Emit the log
-    this.emitError(hookData);
+
+    this.hookStats.incrementCount(hookId);
+    if (this.hookStats.shouldTrigger(hookId)) {
+      /* @type {HookData} */
+      const hookData = this.hookStats.generateHookData(hookId, err);
+      // Emit the log
+      this.emitInfo(hookData);
+      this.emitError(hookData);
+    }
   }
 }
 
