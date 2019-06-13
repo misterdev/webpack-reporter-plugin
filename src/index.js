@@ -240,7 +240,7 @@ class ReporterPlugin extends Tapable {
     const { hookStats } = this;
     const handler = {
       'compiler.done': this.onCompilerDone.bind(this),
-      'compiler.failed': this.onCompilerFailed,
+      'compiler.failed': this.onCompilerFailed.bind(this),
       default: (...args) => {
         hookStats.incrementCount(hookId);
         if (hookStats.shouldTrigger(hookId)) {

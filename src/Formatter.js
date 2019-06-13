@@ -23,6 +23,9 @@ class Formatter {
   white(text) {
     return `\u001B[37m${text}\u001B[0m`;
   }
+  bold(text) {
+    return `\u001B[1m${text}\u001B[0m`;
+  }
 }
 
 module.exports = Formatter;

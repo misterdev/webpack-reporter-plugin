@@ -27,16 +27,28 @@ class Reporter {
 
   onInfo(hookData) {
     const { blue, yellow, green } = this.style;
+    const { hookId, lastCall, data } = hookData;
     // Formats and prints the output
-    this.incrementHookCounter(hookData.hookId);
-    const date = new Date(hookData.lastCall);
+    this.incrementHookCounter(hookId);
+    const date = new Date(lastCall);
     const time = `${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()}`;
 
-    console.log(
-      `${blue('[Reporter]')} ${time} ${green(hookData.hookId)} ${yellow(
-        this.counter[hookData.hookId]
-      )}`
-    );
+    if (hookId === 'compiler.beforeRun' || hookId === 'compiler.watchRun') {
+      // TODO uniform parameters
+      const compiler = data[0];
+      const compilationName = compiler.name ? ` ${compiler.name} ` : ' ';
+      this.print(`\nCompilation${  compilationName  }starting…\n`);
+    } else if (hookId === 'compiler.done') {
+      // TODO uniform parameters
+      const compilationName = data.name ? ` ${data.name} ` : ' ';
+      this.print(`\nCompilation${  compilationName  }finished\n`);
+    } else {
+      this.print(
+        `${blue('[Reporter]')} ${time} ${green(hookId)} ${yellow(
+          this.counter[hookId]
+        )}`
+      );
+    }
   }
 
   onStats(hookData) {
@@ -44,17 +56,35 @@ class Reporter {
     const delimiter = this.outputOptions.buildDelimiter
       ? `${this.outputOptions.buildDelimiter}\n`
       : '';
-    // if (statsString) process.stdout.write(`${statsString}\n${delimiter}`);
+    if (statsString) this.print(`${statsString}\n${delimiter}`);
   }
 
   onError(hookData) {
-    console.error(this.style.red(`\n[Reporter]:\n\n    ${hookData.data}\n`));
+    const error = hookData.data;
+    const { red, bold } = this.style;
+
+    if (error.name === 'EntryModuleNotFoundError') {
+      this.print(
+        red(
+          bold(
+            '\nInsufficient number of arguments or no entry found.' +
+              "\nAlternatively, run 'webpack(-cli) --help' for usage info.\n"
+          )
+        )
+      );
+    } else {
+      this.print(red(`\n[Reporter]:\n\n    ${hookData.data}\n`));
+    }
   }
 
   onWarning(hookData) {
-    console.error(
+    this.print(
       this.style.yellow(`\n[Reporter]:\n\n    ${hookData.data}\n\u001B[0m`)
     );
+  }
+
+  print(text) {
+    process.stdout.write(`${text}\n`);
   }
 }
 
