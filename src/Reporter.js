@@ -27,28 +27,26 @@ class Reporter {
 
   onInfo(hookData) {
     const { blue, yellow, green } = this.style;
-    const { hookId, lastCall, data } = hookData;
+    const { hookId, lastCall, data, message } = hookData;
     // Formats and prints the output
     this.incrementHookCounter(hookId);
     const date = new Date(lastCall);
     const time = `${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()}`;
-
-    if (hookId === 'compiler.beforeRun' || hookId === 'compiler.watchRun') {
-      // TODO uniform parameters
-      const compiler = data[0];
-      const compilationName = compiler.name ? ` ${compiler.name} ` : ' ';
-      this.print(`\nCompilation${  compilationName  }starting…\n`);
-    } else if (hookId === 'compiler.done') {
-      // TODO uniform parameters
-      const compilationName = data.name ? ` ${data.name} ` : ' ';
-      this.print(`\nCompilation${  compilationName  }finished\n`);
-    } else {
-      this.print(
-        `${blue('[Reporter]')} ${time} ${green(hookId)} ${yellow(
-          this.counter[hookId]
-        )}`
-      );
-    }
+    // TODO
+    // if (hookId === 'compiler.beforeRun' || hookId === 'compiler.watchRun') {
+    //   // TODO uniform parameters
+    //   const compiler = data[0];
+    //   const compilationName = compiler.name ? ` ${compiler.name} ` : ' ';
+    //   this.print(`\nCompilation${  compilationName  }starting…\n`);
+    // } else if (hookId === 'compiler.done') {
+    //   // TODO uniform parameters
+    //   const compilationName = data.name ? ` ${data.name} ` : ' ';
+    //   this.print(`\nCompilation${  compilationName  }finished\n`);
+    this.print(
+      `${blue('[Reporter]')} ${time} ${green(message)} ${yellow(
+        this.counter[hookId]
+      )}`
+    );
   }
 
   onStats(hookData) {

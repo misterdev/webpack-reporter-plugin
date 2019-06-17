@@ -1,3 +1,5 @@
+const message = require('./utils/message');
+
 /**
  * @typedef {object} Stats -- TODO import from webpack
  * @typedef {object} HookData - creates a new type named 'HookData'
@@ -6,6 +8,7 @@
  * @property {number} count - number of times the hook is executed
  * @property {Stats | string} [data] - custom hook data
  * @property {number} lastCall -- last hook trigger timestamp
+ * @property {string} message -- custom message
  */
 
 class HookStats {
@@ -72,15 +75,21 @@ class HookStats {
    * @returns {HookData} HookData
    */
   generateHookData(hookId, data) {
+    // TODO improve
+    if (!this.hooks[hookId]) {
+      throw new Error(
+        `HOUSTON WE HAVE A SERIOUS PROBLEM, ${hookId} does not exists`
+      );
+    }
     this.hooks[hookId].lastCall = Date.now();
     const { count, lastCall } = this.hooks[hookId];
-    // TODO check if exists
     return {
       context: this.context,
       hookId,
       count,
       data,
       lastCall,
+      message: message[hookId],
     };
   }
 }
