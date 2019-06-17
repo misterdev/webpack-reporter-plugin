@@ -261,6 +261,14 @@ class ReporterPlugin extends Tapable {
     const { hookStats } = this;
     const hookId = 'compiler.done';
 
+    hookStats.incrementCount(hookId);
+    if (hookStats.shouldTrigger(hookId)) {
+      /* @type {HookData} */
+      const hookData = hookStats.generateHookData(hookId, stats);
+      this.emitInfo(hookData);
+      this.emitStats(hookData);
+    }
+
     if (stats.hasErrors()) {
       stats.compilation.errors.forEach((err) => {
         const hookData = hookStats.generateHookData(hookId, err);
@@ -273,14 +281,6 @@ class ReporterPlugin extends Tapable {
         const hookData = hookStats.generateHookData(hookId, warn);
         this.emitWarn(hookData);
       });
-    }
-
-    hookStats.incrementCount(hookId);
-    if (hookStats.shouldTrigger(hookId)) {
-      /* @type {HookData} */
-      const hookData = hookStats.generateHookData(hookId, stats);
-      this.emitInfo(hookData);
-      this.emitStats(hookData);
     }
   }
 
