@@ -111,7 +111,6 @@ class ReporterPlugin extends Tapable {
 
     /** @type {HookStats} */
     this.hookStats = new HookStats();
-    /** @type {formatter} */
     this.formatter = formatter;
 
     validateOptions(schema, options, 'Reporter Plugin');
