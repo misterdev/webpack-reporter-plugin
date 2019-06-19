@@ -1,5 +1,5 @@
-import ReporterPlugin from '../src';
-import CJSReporterPlugin from '../src/cjs';
+const ReporterPlugin = require('../src');
+const CJSReporterPlugin = require('../src/cjs');
 
 describe('CJS', () => {
   it('should export plugin', () => {

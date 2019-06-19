@@ -14,7 +14,7 @@
 ## Install
 
 ```sh
-npm install
+npm install webpack-reporter-plugin --save-dev
 ```
 
 ## Usage
