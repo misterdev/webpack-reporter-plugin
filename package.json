@@ -11,6 +11,7 @@
     "lint:prettier": "prettier \"{**/*,*}.{js,json,md,yml,css}\" --list-different",
     "lint:code": "eslint --cache src test",
     "lint:types": "tsc --pretty",
+    "pretest": "npm run lint",
     "security": "npm audit",
     "test": "npm run test:coverage",
     "test:only": "jest",
