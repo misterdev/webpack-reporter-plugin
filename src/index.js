@@ -206,7 +206,6 @@ class ReporterPlugin extends Tapable {
         if (hook) {
           hook.tap(REPORTER_PLUGIN, this.hookHandler(hookId));
         } else {
-          // TODO pass it to the Reporter?
           console.error(
             this.formatter.red(
               `[ReporterPlugin] Error: The "${hookId}" hook does not exists`
