@@ -13,5 +13,5 @@
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
-  "include": ["src/*.js"]
+  "include": ["src/*.js", "src/utils/*.js"]
 }

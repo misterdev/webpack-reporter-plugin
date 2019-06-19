@@ -8,7 +8,7 @@ const { Tapable, SyncWaterfallHook } = require('tapable');
 
 const schema = require('./options.json');
 const Reporter = require('./Reporter');
-const Formatter = require('./Formatter');
+const formatter = require('./utils/formatter');
 const HookStats = require('./HookStats');
 
 const REPORTER_PLUGIN = 'ReporterPlugin';
@@ -111,8 +111,8 @@ class ReporterPlugin extends Tapable {
 
     /** @type {HookStats} */
     this.hookStats = new HookStats();
-    /** @type {Formatter} */
-    this.formatter = new Formatter();
+    /** @type {formatter} */
+    this.formatter = formatter;
 
     validateOptions(schema, options, 'Reporter Plugin');
     this.options = this.defaultOptions(options);
