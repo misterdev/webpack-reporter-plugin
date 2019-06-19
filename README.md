@@ -1,20 +1,30 @@
-<h1 align="center">Welcome to webpack-reporter-plugin 👋</h1>
+<div align="center">
+    <a href="https://github.com/webpack/webpack-cli">
+        <img width="200" height="200" src="https://webpack.js.org/assets/icon-square-big.svg">
+    </a>
+</div>
+
+<h1 align="center">webpack-reporter-plugin</h1>
+
+<p align="center">
+  A plugin to customize webpack&#39;s output
+</p>
+<br>
+
 <p>
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <a href=" ">
+    <img alt="Build Status" src="https://travis-ci.org/misterdev/webpack-reporter-plugin.svg?branch=master" target="_blank" />
+  </a>
+  <a href=" ">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
   </a>
-  <a href="https://twitter.com/misterdev_">
-    <img alt="Twitter: misterdev_" src="https://img.shields.io/twitter/follow/misterdev_.svg?style=social" target="_blank" />
-  </a>
 </p>
-
-> An output-reporter plugin to customize webpack&#39;s output
 
 ## Install
 
 ```sh
-npm install webpack-reporter-plugin --save-dev
+npm install webpack-reporter-plugin --save-dev (jk does not work)
 ```
 
 ## Usage
