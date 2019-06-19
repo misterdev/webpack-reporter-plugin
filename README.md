@@ -13,8 +13,8 @@
 
 <p>
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
-  <a href="https://travis-ci.org/misterdev/webpack-reporter-plugin">
-    <img alt="Build Status" src="https://travis-ci.org/misterdev/webpack-reporter-plugin.svg?branch=master" target="_blank" />
+  <a href="https://travis-ci.org/misterdev/webpack-reporter-plugin" target="_blank" >
+    <img alt="Build Status" src="https://travis-ci.org/misterdev/webpack-reporter-plugin.svg?branch=master" />
   </a>
   <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
 </p>
