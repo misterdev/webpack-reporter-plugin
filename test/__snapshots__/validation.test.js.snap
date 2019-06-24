@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`validation 1`] = `
+exports[`plugin parameters should recognize wrong keys 1`] = `
 "Reporter Plugin Invalid Options
 
 options should NOT have additional properties

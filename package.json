@@ -12,6 +12,7 @@
     "lint:code": "eslint --cache src test",
     "lint:types": "tsc --pretty",
     "pretest": "npm run lint",
+    "prettier": "prettier \"{**/*,*}.{js,json,md,yml,css}\" --write",
     "security": "npm audit",
     "test": "npm run test:coverage",
     "test:only": "jest",
