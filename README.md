@@ -21,14 +21,49 @@
 
 ## Install
 
+You can temporary install the plugin from npm using the following command:
+
 ```sh
-npm install webpack-reporter-plugin --save-dev (jk does not work)
+npm install test-webpack-reporter-plugin --save-dev
+```
+
+or
+
+```sh
+yarn add test-webpack-reporter-plugin -D
 ```
 
 ## Usage
 
-```sh
-TODO
+You can use it like any other plugin in your webpack configuration:
+
+**webpack.config.js**
+
+```js
+module.exports = {
+  // ...
+  plugins: [
+    // every parameter is optional
+    new ReporterPlugin({
+      default: false, // exclude all default hooks, if not set it is true
+      hooks: {
+        compiler: {
+          done: true, // include this hook
+          emit: false, // exclude this hook
+        },
+        compilation: {
+          buildModule: 5, // trigger once every 5
+          contentHash: '2ms', // trigger at most once every 2ms
+        },
+      },
+      reporters: [
+        // one or more custom reporters
+        // this is the default one, used if no reporter is given
+        new ReporterPlugin.Reporter(),
+      ],
+    }),
+  ],
+};
 ```
 
 ## Run tests
