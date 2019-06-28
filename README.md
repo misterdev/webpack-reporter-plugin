@@ -66,18 +66,48 @@ module.exports = {
 };
 ```
 
+## Writing a reporter
+
+This plugin can be extended with one or more reporters. A custom reporter is similar to a usual webpack plugin:
+
+**reporter.js**
+
+```
+class Reporter {
+  apply(reporter, outputOptions) {
+    // Adds a listener for a specific log
+    reporter.hooks.info.tap('Reporter', this.onInfo);
+    reporter.hooks.stats.tap('Reporter', this.onStats);
+    reporter.hooks.error.tap('Reporter', this.onError);
+    reporter.hooks.warn.tap('Reporter', this.onWarning);
+  }
+  onInfo(hookData) {
+    // print something
+  }
+}
+```
+
+## HookData
+
+The reporter plugin has 4 sync waterfall hooks (see [tapable](https://github.com/webpack/tapable)): `stats`, `info`, `warn` and `error`. Each hook callback receives some data with this structure:
+
+```js
+// data emitted by each reporter hook
+const hookData = {
+  hookId: 'compiler.done', // hook's id
+  count: 0, // counter of times the hook is executed
+  lastCall: 1561725682, // last hook trigger timestamp
+  message: 'Compilation finished', // custom message
+  context: {...}, // optional, hook context
+  data: {} // custom hook data
+}
+```
+
 ## Run tests
 
 ```sh
 npm run test
 ```
-
-## Author
-
-👤 **Devid Farinelli**
-
-- Twitter: [@misterdev\_](https://twitter.com/misterdev_)
-- Github: [@misterdev](https://github.com/misterdev)
 
 ## 🤝 Contributing
 
@@ -86,6 +116,11 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check 
 ## Show your support
 
 Give a ⭐️ if this project helped you!
+
+👤 **Devid Farinelli**
+
+- Twitter: [@misterdev\_](https://twitter.com/misterdev_)
+- Github: [@misterdev](https://github.com/misterdev)
 
 ## 📝 License
 
