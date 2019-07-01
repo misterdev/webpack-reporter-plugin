@@ -7,7 +7,7 @@ const validateOptions = require('schema-utils');
 const { Tapable, SyncWaterfallHook } = require('tapable');
 
 const schema = require('./options.json');
-const Reporter = require('./ColoredReporter');
+const Reporter = require('./Reporter');
 const formatter = require('./utils/formatter');
 const { HookStats, HookData } = require('./HookStats');
 
@@ -176,10 +176,7 @@ class ReporterPlugin extends Tapable {
 
   apply(compiler) {
     this.hookStats.setContext(compiler.context);
-    // TODO remove hardcoded
-    const outputOptions = compiler.options.stats || {
-      colors: true,
-    };
+    const outputOptions = compiler.options.stats || {};
 
     // Initialize all the reporters
     this.reporters.forEach((reporter) => reporter.apply(this, outputOptions));
@@ -199,11 +196,9 @@ class ReporterPlugin extends Tapable {
         if (hook) {
           hook.tap(REPORTER_PLUGIN, this.hookHandler(hookId));
         } else {
-          console.error(
-            this.formatter.red(
-              `[ReporterPlugin] Error: The "${hookId}" hook does not exists`
-            )
-          );
+          this.emitError({
+            data: `Error: The "${hookId}" hook does not exists`,
+          });
         }
       }
     });
@@ -218,11 +213,9 @@ class ReporterPlugin extends Tapable {
         if (hook) {
           hook.tap(REPORTER_PLUGIN, this.hookHandler(hookId));
         } else {
-          console.log(
-            this.formatter.red(
-              `[ReporterPlugin] Error: The "${hookId}" hook does not exists`
-            )
-          );
+          this.emitError({
+            data: `Error: The "${hookId}" hook does not exists`,
+          });
         }
       }
     }
