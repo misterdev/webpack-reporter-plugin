@@ -3,20 +3,32 @@ const message = require('./utils/message');
 /**
  * @typedef {object} Stats -- TODO import from webpack
  *
- * @typedef {object} HookData - data emitted by each reporter hook
- * @property {string} [context] - hook context
- * @property {string} hookId - hook's id
- * @property {number} count - number of times the hook is executed
- * @property {Stats | string} [data] - custom hook data
- * @property {number} lastCall -- last hook trigger timestamp
- * @property {string} message -- custom message
- *
  * @typedef {object} HookStat - webpack hooks stats
  * @property {string} name - hook id
  * @property {number} count - call counter
  * @property {number | string} throttle - throttle frequency
  * @property {lastCall} number - last hook call timestamp
  */
+
+class HookData {
+  /**
+   * HookData constructor
+   * @param {string} [context] - hook context
+   * @param {string} hookId - hook's id
+   * @param {number} count - number of times the hook is executed
+   * @param {Stats | string} [data] - custom hook data
+   * @param {number} lastCall -- last hook trigger timestamp
+   * @param {string} message -- custom message
+   */
+  constructor(context, hookId, count = 0, data, lastCall, message) {
+    this.context = context;
+    this.hookId = hookId;
+    this.count = count;
+    this.data = data;
+    this.lastCall = lastCall;
+    this.message = message;
+  }
+}
 
 class HookStats {
   constructor() {
@@ -89,15 +101,18 @@ class HookStats {
     }
     this.hooks[hookId].lastCall = Date.now();
     const { count, lastCall } = this.hooks[hookId];
-    return {
-      context: this.context,
+    return new HookData(
+      this.context,
       hookId,
       count,
       data,
       lastCall,
-      message: message[hookId],
-    };
+      message[hookId]
+    );
   }
 }
 
-module.exports = HookStats;
+module.exports = {
+  HookStats,
+  HookData,
+};

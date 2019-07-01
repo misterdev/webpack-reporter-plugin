@@ -7,9 +7,9 @@ const validateOptions = require('schema-utils');
 const { Tapable, SyncWaterfallHook } = require('tapable');
 
 const schema = require('./options.json');
-const Reporter = require('./Reporter');
+const Reporter = require('./ColoredReporter');
 const formatter = require('./utils/formatter');
-const HookStats = require('./HookStats');
+const { HookStats, HookData } = require('./HookStats');
 
 const REPORTER_PLUGIN = 'ReporterPlugin';
 
@@ -76,14 +76,8 @@ const compilationHooks = (selected) => ({
   afterSeal: selected,
 });
 
-/** TODO REMOVE DUPLICATE
+/**
  * @typedef {object} Stats -- TODO import from webpack
- * @typedef {object} HookData - creates a new type named 'HookData'
- * @property {string} [context] - hook context
- * @property {string} hookId - hook's id
- * @property {number} count - number of times the hook is executed
- * @property {Stats | string} [data] - custom hook data
- * @property {number} lastCall -- last hook trigger timestamp
  */
 
 class ReporterPlugin extends Tapable {
