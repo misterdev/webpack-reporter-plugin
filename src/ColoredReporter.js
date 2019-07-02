@@ -32,16 +32,6 @@ class Reporter {
     this.incrementHookCounter(hookId);
     const date = new Date(lastCall);
     const time = `${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()}`;
-    // TODO
-    // if (hookId === 'compiler.beforeRun' || hookId === 'compiler.watchRun') {
-    //   // TODO uniform parameters
-    //   const compiler = data[0];
-    //   const compilationName = compiler.name ? ` ${compiler.name} ` : ' ';
-    //   this.print(`\nCompilation${  compilationName  }starting…\n`);
-    // } else if (hookId === 'compiler.done') {
-    //   // TODO uniform parameters
-    //   const compilationName = data.name ? ` ${data.name} ` : ' ';
-    //   this.print(`\nCompilation${  compilationName  }finished\n`);
     this.print(
       `${blue('[Reporter]')} ${time} ${green(message)} ${yellow(
         this.counter[hookId]

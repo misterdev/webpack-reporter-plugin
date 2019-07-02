@@ -116,7 +116,7 @@ class ReporterPlugin extends Tapable {
   }
 
   defaultOptions(options) {
-    // TODO a really ugly but working way of defaulting options
+    // A really ugly but working way of defaulting options
     const defaults = ReporterPlugin.defaultOptions;
     const result = Object.assign({}, defaults, options);
     const { hooks } = options;
