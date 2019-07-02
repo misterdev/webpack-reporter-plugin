@@ -7,7 +7,7 @@
 <h1 align="center">webpack-reporter-plugin</h1>
 
 <p align="center">
-  A plugin to customize webpack&#39;s output
+  A plugin to customize webpack&#39zs output
 </p>
 <br>
 
@@ -72,7 +72,7 @@ This plugin can be extended with one or more reporters. A custom reporter is sim
 
 **reporter.js**
 
-```
+```js
 class Reporter {
   apply(reporter, outputOptions) {
     // Adds a listener for a specific log
