@@ -1,6 +1,6 @@
 {
   "name": "test-webpack-reporter-plugin",
-  "version": "1.0.1-0",
+  "version": "1.0.1-1",
   "description": "An output-reporter plugin to customize webpack's output",
   "main": "src/cjs.js",
   "repository": "https://github.com/misterdev/webpack-reporter-plugin.git",
@@ -13,6 +13,7 @@
     "lint:types": "tsc --pretty",
     "pretest": "npm run lint",
     "prettier": "prettier \"{**/*,*}.{js,json,md,yml,css}\" --write",
+    "publish": "np",
     "security": "npm audit",
     "test": "npm run test:coverage",
     "test:only": "jest",
@@ -21,7 +22,6 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^8.0.0",
-    "@types/chalk": "^2.2.0",
     "@types/node": "^12.0.5",
     "@types/tapable": "^1.0.4",
     "@webpack-contrib/eslint-config-webpack": "^3.0.0",
