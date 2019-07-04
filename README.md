@@ -12,8 +12,9 @@
 <br>
 
 <p>
-  <a href="https://img.shields.io/npm/v/test-webpack-reporter-plugin.svg">
-    <img src="https://img.shields.io/npm/v/test-webpack-reporter-plugin.svg" />
+  <a href="https://www.npmjs.com/package/test-webpack-reporter-plugin">
+    <img src="https://img.shields.io/npm/v/test-webpack-reporter-plugin.svg"
+    />
   </a>
   <a href="https://travis-ci.org/misterdev/webpack-reporter-plugin" target="_blank" >
     <img alt="Build Status" src="https://travis-ci.org/misterdev/webpack-reporter-plugin.svg?branch=master" />
