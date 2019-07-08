@@ -7,7 +7,7 @@
 <h1 align="center">webpack-reporter-plugin</h1>
 
 <p align="center">
-  A plugin to customize webpack&#39zs output
+  A plugin to customize webpack&#39s output
 </p>
 <br>
 
