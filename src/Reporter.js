@@ -40,7 +40,9 @@ class Reporter {
     //   // TODO uniform parameters
     //   const compilationName = data.name ? ` ${data.name} ` : ' ';
     //   this.print(`\nCompilation${  compilationName  }finished\n`);
-    this.print(`[Reporter] ${time} ${message} ${this.counter[hookId]}`);
+    this.print(
+      `[Reporter] ${time} ${message || hookId} ${this.counter[hookId]}`
+    );
   }
 
   onStats(hookData) {
