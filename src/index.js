@@ -184,9 +184,9 @@ class ReporterPlugin extends Tapable {
     }
   }
 
-  apply(compiler) {
+  apply(compiler, outputOptions) {
     this.hookStats.setContext(compiler.context);
-    const outputOptions = compiler.options.stats || {};
+    outputOptions = outputOptions || compiler.options.stats || {};
 
     // Initialize all the reporters
     this.reporters.forEach((reporter) => reporter.apply(this, outputOptions));
