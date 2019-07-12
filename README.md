@@ -22,9 +22,14 @@
   <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
 </p>
 
+### Description
+
+There are currently 2 ways of customizing webpack's output, you can set the “stats” option to configure which bundle information you want to display or you can write a plugin (e.g. ProgressPlugin, webpackbar, friendly-errors-webpack-plugin).
+The second approach gives you more control over the output but requires a good knowledge of how webpack works internally. This plugin abstract over webpack's internals helping writing custom reporters.
+
 ## Install
 
-You can temporary install the plugin from npm using the following command:
+You can install the plugin from npm using the following command:
 
 ```sh
 npm install test-webpack-reporter-plugin --save-dev
