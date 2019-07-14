@@ -24,7 +24,7 @@
 
 ### Description
 
-There are currently 2 ways of customizing webpack's output, you can set the “stats” option to configure which bundle information you want to display or you can write a plugin (e.g. ProgressPlugin, webpackbar, friendly-errors-webpack-plugin).
+There are currently 2 ways of customizing webpack's output, you can set the “[stats](https://webpack.js.org/configuration/stats/)” option to configure which bundle information you want to display or you can write a plugin (e.g. [ProgressPlugin](https://webpack.js.org/plugins/progress-plugin/), [webpackbar](https://github.com/nuxt/webpackbar), [friendly-errors-webpack-plugin](https://github.com/geowarin/friendly-errors-webpack-plugin)).
 The second approach gives you more control over the output but requires a good knowledge of how webpack works internally. This plugin abstract over webpack's internals helping writing custom reporters.
 
 ## Install
@@ -74,7 +74,9 @@ module.exports = {
 };
 ```
 
-![Demo CountPages alpha](./docs/video/new-output.gif)
+<div style="text-align:center">
+  <img src="./docs/video/new-output.gif" />
+</div>
 
 ## Writing a reporter
 
