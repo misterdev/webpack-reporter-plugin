@@ -6,9 +6,9 @@ const mockProcess = require('jest-mock-process');
 
 describe('Reporter should listen & print', () => {
   const reporterPlugin = mockReporterPlugin();
-  const mockStdout = mockProcess.mockProcessStdout();
 
   it('info correctly', () => {
+    const mockStdout = mockProcess.mockProcessStdout();
     new Reporter().apply(reporterPlugin);
 
     reporterPlugin.emitInfo({
@@ -21,9 +21,11 @@ describe('Reporter should listen & print', () => {
     expect(mockStdout).toHaveBeenCalledWith(
       '[Reporter] 11:44:659 compiler.test message 1\n'
     );
+    mockStdout.mockRestore();
   });
 
   it('warn correctly', () => {
+    const mockStdout = mockProcess.mockProcessStdout();
     new Reporter().apply(reporterPlugin);
     reporterPlugin.emitWarn({
       hookId: 'compiler.test',
@@ -36,9 +38,11 @@ describe('Reporter should listen & print', () => {
     expect(mockStdout).toHaveBeenCalledWith(
       '\n[Reporter]:\n\n    this is a warn message\n\n'
     );
+    mockStdout.mockRestore();
   });
 
   it('error correctly', () => {
+    const mockStdout = mockProcess.mockProcessStdout();
     new Reporter().apply(reporterPlugin);
     reporterPlugin.emitError({
       hookId: 'compiler.test',
@@ -51,6 +55,7 @@ describe('Reporter should listen & print', () => {
     expect(mockStdout).toHaveBeenCalledWith(
       '\n[Reporter]:\n\n    Error: a very bad error!!\n\n'
     );
+    mockStdout.mockRestore();
   });
 
   it('stats correctly', () => {
