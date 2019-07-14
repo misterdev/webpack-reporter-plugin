@@ -1,5 +1,5 @@
 const ReporterPlugin = require('../src');
-const Reporter = require('../src/ColoredReporter');
+const Reporter = require('../src/Reporter');
 
 describe('plugin parameters', () => {
   it('should validate option schema', () => {

@@ -67,7 +67,7 @@ class Reporter {
   }
 
   onWarning(hookData) {
-    this.print(`\n[Reporter]:\n\n    ${hookData.data}\n\u001B[0m`);
+    this.print(`\n[Reporter]:\n\n    ${hookData.data}\n`);
   }
 
   print(text) {
