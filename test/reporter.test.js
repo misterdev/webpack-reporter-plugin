@@ -1,8 +1,10 @@
+// const webpack = require('webpack');
+const mockProcess = require('jest-mock-process');
+
 const Reporter = require('../src/Reporter');
 
+// const ReporterPlugin = require('../src/index'); //TODO
 const { mockReporterPlugin } = require('./helpers');
-
-const mockProcess = require('jest-mock-process');
 
 describe('Reporter should listen & print', () => {
   const reporterPlugin = mockReporterPlugin();
@@ -59,15 +61,22 @@ describe('Reporter should listen & print', () => {
   });
 
   it('stats correctly', () => {
-    // new Reporter().apply(reporterPlugin);
-    // reporterPlugin.emitInfo({
-    //     hookId: 'compiler.test',
-    //     count: 1,
-    //     data: 'some data',
-    //     lastCall: 1563104659,
-    //     message: 'compiler.test message'
+    // TODO doesn't work
+    // const compiler = webpack({
+    //   context: this.__dirname,
+    //   entry: './fixtures/a'
     // });
-    // expect(mockStdout).toHaveBeenCalledWith("[Reporter] 0:0:0 compiler.test message 1\n");
+    // const reporterPlugin = new ReporterPlugin();
+    // reporterPlugin.apply(compiler);
+    // const reporter = new Reporter();
+    // reporter.apply(reporterPlugin);
+    // compiler.run((err, stats) => {
+    //   const mockStdout = mockProcess.mockProcessStdout();
+    //   const statsString = stats.toString();
+    //   expect(mockStdout).toHaveBeenCalledWith(`${statsString}\n `);
+    //   mockStdout.mockRestore();
+    //   done();
+    // });
   });
 
   it('should count info correctly', () => {
