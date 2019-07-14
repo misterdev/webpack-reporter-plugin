@@ -74,6 +74,8 @@ module.exports = {
 };
 ```
 
+![Demo CountPages alpha](./docs/video/new-output.gif)
+
 ## Writing a reporter
 
 This plugin can be extended with one or more reporters. A custom reporter is similar to a usual webpack plugin:
