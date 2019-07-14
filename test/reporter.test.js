@@ -69,28 +69,32 @@ describe('Reporter should listen & print', () => {
     // });
     // expect(mockStdout).toHaveBeenCalledWith("[Reporter] 0:0:0 compiler.test message 1\n");
   });
+
+  it('should count info correctly', () => {
+    const mockStdout = mockProcess.mockProcessStdout();
+    new Reporter().apply(reporterPlugin);
+    const hookData = {
+      hookId: 'compiler.test',
+      count: 1,
+      data: 'some data',
+      lastCall: 1563104659,
+      message: 'compiler.test message',
+    };
+
+    reporterPlugin.emitInfo(hookData);
+    expect(mockStdout).toHaveBeenCalledWith(
+      '[Reporter] 11:44:659 compiler.test message 1\n'
+    );
+
+    reporterPlugin.emitInfo(hookData);
+    expect(mockStdout).toHaveBeenCalledWith(
+      '[Reporter] 11:44:659 compiler.test message 2\n'
+    );
+
+    reporterPlugin.emitInfo(hookData);
+    expect(mockStdout).toHaveBeenCalledWith(
+      '[Reporter] 11:44:659 compiler.test message 3\n'
+    );
+    mockStdout.mockRestore();
+  });
 });
-
-// describe('Reporter', () => {
-//     const reporterPlugin = mockReporterPlugin();
-//     const mockStdout = mockProcess.mockProcessStdout();
-//     it('should count info correctly', () => {
-//         new Reporter().apply(reporterPlugin);
-//         const hookData = {
-//             hookId: 'compiler.test',
-//             count: 1,
-//             data: 'some data',
-//             lastCall: 1563104659,
-//             message: 'compiler.test message'
-//         };
-
-//         reporterPlugin.emitInfo(hookData);
-//         expect(mockStdout).toHaveBeenCalledWith("[Reporter] 11:44:659 compiler.test message 1\n");
-
-//         reporterPlugin.emitInfo(hookData);
-//         expect(mockStdout).toHaveBeenCalledWith("[Reporter] 11:44:659 compiler.test message 2\n");
-
-//         reporterPlugin.emitInfo(hookData);
-//         expect(mockStdout).toHaveBeenCalledWith("[Reporter] 11:44:659 compiler.test message 3\n");
-//       });
-// });
