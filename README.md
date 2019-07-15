@@ -51,17 +51,17 @@ You can use it like any other plugin in your webpack configuration:
 module.exports = {
   // ...
   plugins: [
-    // every parameter is optional
+    // each parameter is optional
     new ReporterPlugin({
-      default: false, // exclude all default hooks, if not set it is true
+      default: true, // wheter or not include the default hooks, [default: true]
       hooks: {
         compiler: {
-          done: true, // include this hook
-          emit: false, // exclude this hook
+          done: true, // listen this hook
+          emit: false, // don't listen this hook
         },
         compilation: {
-          buildModule: 5, // trigger once every 5
-          contentHash: '2ms', // trigger at most once every 2ms
+          buildModule: 5, // log this hook once every 5 times
+          contentHash: '2ms', // log this hook at most once every 2ms
         },
       },
       reporters: [
@@ -73,6 +73,8 @@ module.exports = {
   ],
 };
 ```
+
+Here's an example of how the output will look like (coloured for readability):
 
 <div align="center">
   <img src="./docs/video/new-output.gif" />
