@@ -74,7 +74,7 @@ module.exports = {
 };
 ```
 
-<div style="display: flex; justify-content: center;">
+<div align="center">
   <img src="./docs/video/new-output.gif" />
 </div>
 
