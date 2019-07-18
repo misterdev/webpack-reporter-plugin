@@ -1,9 +1,10 @@
-// const webpack = require('webpack');
+const webpack = require('webpack');
 const mockProcess = require('jest-mock-process');
 
 const Reporter = require('../src/Reporter');
 
-// const ReporterPlugin = require('../src/index'); //TODO
+const ReporterPlugin = require('../src/index');
+
 const { mockReporterPlugin } = require('./helpers');
 
 describe('Reporter should listen & print', () => {
@@ -60,23 +61,26 @@ describe('Reporter should listen & print', () => {
     mockStdout.mockRestore();
   });
 
-  it('stats correctly', () => {
-    // TODO doesn't work
-    // const compiler = webpack({
-    //   context: this.__dirname,
-    //   entry: './fixtures/a'
-    // });
-    // const reporterPlugin = new ReporterPlugin();
-    // reporterPlugin.apply(compiler);
-    // const reporter = new Reporter();
-    // reporter.apply(reporterPlugin);
-    // compiler.run((err, stats) => {
-    //   const mockStdout = mockProcess.mockProcessStdout();
-    //   const statsString = stats.toString();
-    //   expect(mockStdout).toHaveBeenCalledWith(`${statsString}\n `);
-    //   mockStdout.mockRestore();
-    //   done();
-    // });
+  it('stats correctly', (done) => {
+    const mockStdout = mockProcess.mockProcessStdout();
+    const compiler = webpack({
+      context: __dirname,
+      entry: './fixtures/a',
+    });
+
+    const reporterPlugin = new ReporterPlugin();
+    reporterPlugin.apply(compiler);
+
+    const reporter = new Reporter();
+    reporter.apply(reporterPlugin, {});
+
+    compiler.run((err, stats) => {
+      const statsString = `${stats.toString(this.outputOptions)}\n\n`;
+      expect(mockStdout).toHaveBeenCalledWith(statsString);
+
+      mockStdout.mockRestore();
+      done();
+    });
   });
 
   it('should count info correctly', () => {
