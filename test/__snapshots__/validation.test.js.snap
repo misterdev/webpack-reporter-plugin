@@ -1,8 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`plugin parameters should recognize wrong keys 1`] = `
-"Reporter Plugin Invalid Options
-
-options should NOT have additional properties
+"Invalid configuration:  should NOT have additional properties.
+Invalid key \\"wrongKey\\" should be one of: defaults,hooks,reporters
 "
 `;
