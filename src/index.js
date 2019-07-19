@@ -107,6 +107,7 @@ class ReporterPlugin extends Tapable {
     this.hookStats = new HookStats();
     this.formatter = formatter;
 
+    /** @type {String[]} */
     const validationErrors = validateOptions(schema, options);
     if (validationErrors.length) {
       throw new Error(validationErrors[0]);
