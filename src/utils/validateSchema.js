@@ -29,7 +29,7 @@ const validateThrottles = (options) => {
       Object.keys(compiler).forEach((hook) => {
         if (!checkThrottleType(compiler[hook])) {
           errors.push(
-            `Invalid configuration: hooks.compiler\n "compiler.${hook}" value must be boolean, number or a string ending with "ms"`
+            `Invalid configuration: hooks.compiler\n\n\t"compiler.${hook}" value must be boolean, number or a string ending with "ms"\n`
           );
         }
       });
@@ -38,7 +38,7 @@ const validateThrottles = (options) => {
       Object.keys(compilation).forEach((hook) => {
         if (!checkThrottleType(compilation[hook])) {
           errors.push(
-            `Invalid configuration: hooks.compilation\n "compiler.${hook}" value must be boolean, number or a string ending with "ms"`
+            `Invalid configuration: hooks.compilation\n\n\t"compiler.${hook}" value must be boolean, number or a string ending with "ms"\n`
           );
         }
       });
@@ -60,7 +60,7 @@ const parseAjvErrors = (errors) =>
     if (keyword === 'additionalProperties') {
       const wrongKey = params.additionalProperty;
       const validKeys = Object.keys(parentSchema.properties);
-      errorMessage = `Invalid configuration: ${dataPath} ${message}.\nInvalid key "${wrongKey}" must be one of: ${validKeys}\n`;
+      errorMessage = `Invalid configuration: options${dataPath} ${message}.\n\n\tInvalid key "${wrongKey}" must be one of: ${validKeys}\n`;
     }
     return errorMessage;
   });
