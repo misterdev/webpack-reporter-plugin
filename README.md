@@ -19,8 +19,7 @@
   <a href="https://travis-ci.org/misterdev/webpack-reporter-plugin" target="_blank" >
     <img alt="Build Status" src="https://travis-ci.org/misterdev/webpack-reporter-plugin.svg?branch=master" />
   </a>
-    <a href="https://img.shields.io/codecov/c/github/misterdev/webpack-reporter-plugin" target="_blank" >
-    <img alt="Coverage" src="https://img.shields.io/codecov/c/github/misterdev/webpack-reporter-plugin.svg?branch=master" />
+    <img alt="Codecov" src="https://img.shields.io/codecov/c/github/misterdev/webpack-reporter-plugin.svg?token=f223e00d-b831-4a5f-8ba5-6efb8d3397db">
   </a>
   <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
 </p>

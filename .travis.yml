@@ -7,3 +7,5 @@ install:
   - npm ci
 script:
   - npm run test
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
