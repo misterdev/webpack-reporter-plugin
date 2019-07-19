@@ -3,10 +3,10 @@ MIT License http://www.opensource.org/licenses/mit-license.php
 Author Devid Farinelli @misterdev
 */
 
-const validateOptions = require('schema-utils');
 const { Tapable, SyncWaterfallHook } = require('tapable');
 
-const schema = require('./options.json');
+const validateOptions = require('./utils/validateSchema');
+const schema = require('./schema/schema.json');
 const Reporter = require('./Reporter');
 const formatter = require('./utils/formatter');
 const { HookStats, HookData } = require('./HookStats');
@@ -107,7 +107,10 @@ class ReporterPlugin extends Tapable {
     this.hookStats = new HookStats();
     this.formatter = formatter;
 
-    validateOptions(schema, options, 'Reporter Plugin');
+    const validationErrors = validateOptions(schema, options);
+    if (validationErrors.length) {
+      throw new Error(validationErrors[0]);
+    }
     this.options = this.defaultOptions(options);
 
     this.reporters = this.options.reporters;
