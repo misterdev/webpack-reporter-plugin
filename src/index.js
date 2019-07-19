@@ -158,11 +158,6 @@ class ReporterPlugin extends Tapable {
         if (typeof throttle === 'boolean') {
           this.compilerHooks[hookName] = throttle;
         } else {
-          if (typeof throttle !== 'number' && !throttle.endsWith('ms')) {
-            throw new Error(
-              `Throttle value for compiler.${hookName} should be boolean, number or a string ending with "ms"\n`
-            );
-          }
           // if the value is number/string set the throttling
           const hookId = `compiler.${hookName}`;
           this.hookStats.initHook(hookId, throttle);
@@ -176,11 +171,6 @@ class ReporterPlugin extends Tapable {
         if (typeof throttle === 'boolean') {
           this.compilationHooks[hookName] = throttle;
         } else {
-          if (typeof throttle !== 'number' && !throttle.endsWith('ms')) {
-            throw new Error(
-              `Throttle value for compilation.${hookName} should be boolean, number or a string ending with "ms"\n`
-            );
-          }
           const hookId = `compilation.${hookName}`;
           this.hookStats.initHook(hookId, throttle);
         }
