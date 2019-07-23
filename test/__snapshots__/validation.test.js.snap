@@ -6,3 +6,5 @@ exports[`plugin parameters should recognize wrong keys 1`] = `
 	Invalid key \\"wrongKey\\" must be one of: defaults,hooks,reporters
 "
 `;
+
+exports[`plugin parameters should recognize wrong type for default key 1`] = `"should be boolean"`;

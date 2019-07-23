@@ -105,4 +105,13 @@ describe('plugin parameters', () => {
       });
     }).toThrowErrorMatchingSnapshot();
   });
+  it('should recognize wrong type for default key', () => {
+    expect(() => {
+      new ReporterPlugin({
+        hooks: {
+          defaults: 'true',
+        },
+      });
+    }).toThrowErrorMatchingSnapshot();
+  });
 });
