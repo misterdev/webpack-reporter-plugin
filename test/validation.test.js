@@ -105,11 +105,28 @@ describe('plugin parameters', () => {
       });
     }).toThrowErrorMatchingSnapshot();
   });
-  it('should recognize wrong type for default key', () => {
+
+  it('should only accept boolean for "hooks.defaults" option', () => {
+    expect(() => {
+      new ReporterPlugin({
+        hooks: {
+          defaults: true,
+        },
+      });
+    }).not.toThrow();
+
     expect(() => {
       new ReporterPlugin({
         hooks: {
           defaults: 'true',
+        },
+      });
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(() => {
+      new ReporterPlugin({
+        hooks: {
+          defaults: 2,
         },
       });
     }).toThrowErrorMatchingSnapshot();
