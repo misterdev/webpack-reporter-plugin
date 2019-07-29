@@ -195,23 +195,8 @@ exports[`ReporterPlugin should print the default hooks when using "defaults: tru
       "Compilation finished
 ",
     ],
-    Array [
-      "Hash: b74ea97f77c2c2e5a89e
-Version: webpack 4.36.1
-Time: 108ms
-Built at: 07/29/2019 8:06:47 PM
-  Asset       Size  Chunks             Chunk Names
-main.js  969 bytes       0  [emitted]  main
-Entrypoint main = main.js
-[0] ./fixtures/a.js 57 bytes {0} [built]
-",
-    ],
   ],
   "results": Array [
-    Object {
-      "type": "return",
-      "value": true,
-    },
     Object {
       "type": "return",
       "value": true,

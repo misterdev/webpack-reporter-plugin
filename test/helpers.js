@@ -21,7 +21,6 @@ class MockReporter {
     this.outputOptions = {};
 
     this.onInfo = this.onInfo.bind(this);
-    this.onStats = this.onStats.bind(this);
     this.onError = this.onError.bind(this);
     this.onWarning = this.onWarning.bind(this);
   }
@@ -35,7 +34,6 @@ class MockReporter {
     this.outputOptions = outputOptions || {};
 
     reporter.hooks.info.tap('Reporter', this.onInfo);
-    reporter.hooks.stats.tap('Reporter', this.onStats);
     reporter.hooks.error.tap('Reporter', this.onError);
     reporter.hooks.warn.tap('Reporter', this.onWarning);
   }
@@ -54,11 +52,6 @@ class MockReporter {
   onWarning(hookData) {
     const warn = hookData.data;
     this.print(warn);
-  }
-
-  onStats(hookData) {
-    const statsString = hookData.data.toString(this.outputOptions);
-    if (statsString) this.print(statsString);
   }
 
   print(text) {
