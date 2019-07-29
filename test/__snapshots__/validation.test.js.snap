@@ -1,5 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`plugin parameters should handle an incorrect string as throttle value 1`] = `
+"Invalid configuration: hooks.compiler
+
+	\\"compiler.done\\" value must be boolean, number or a string ending with \\"ms\\"
+"
+`;
+
 exports[`plugin parameters should only accept boolean for "hooks.defaults" option 1`] = `"should be boolean"`;
 
 exports[`plugin parameters should only accept boolean for "hooks.defaults" option 2`] = `"should be boolean"`;

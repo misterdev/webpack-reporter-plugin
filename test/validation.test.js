@@ -98,6 +98,18 @@ describe('plugin parameters', () => {
     }).not.toThrow();
   });
 
+  it('should handle an incorrect string as throttle value', () => {
+    expect(() => {
+      new ReporterPlugin({
+        hooks: {
+          compiler: {
+            done: '2',
+          },
+        },
+      });
+    }).toThrowErrorMatchingSnapshot();
+  });
+
   it('should recognize wrong keys', () => {
     expect(() => {
       new ReporterPlugin({
