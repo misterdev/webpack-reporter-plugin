@@ -157,6 +157,7 @@ class ReporterPlugin extends Tapable {
         if (typeof throttle === 'boolean') {
           this.compilerHooks[hookName] = throttle;
         } else {
+          this.compilerHooks[hookName] = true;
           // if the value is number/string set the throttling
           const hookId = `compiler.${hookName}`;
           this.hookStats.initHook(hookId, throttle);
@@ -170,6 +171,7 @@ class ReporterPlugin extends Tapable {
         if (typeof throttle === 'boolean') {
           this.compilationHooks[hookName] = throttle;
         } else {
+          this.compilationHooks[hookName] = true;
           const hookId = `compilation.${hookName}`;
           this.hookStats.initHook(hookId, throttle);
         }
@@ -290,13 +292,6 @@ class ReporterPlugin extends Tapable {
 ReporterPlugin.defaultOptions = {
   hooks: {
     defaults: true,
-    compiler: {
-      done: true,
-    },
-    compilation: {
-      buildModule: 5,
-      contentHash: '4ms',
-    },
   },
   reporters: [new Reporter()],
 };
