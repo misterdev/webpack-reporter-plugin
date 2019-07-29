@@ -15,6 +15,58 @@ class MockReporterPlugin {
   }
 }
 
-const mockReporterPlugin = () => new MockReporterPlugin();
+class MockReporter {
+  constructor() {
+    this.counter = {};
+    this.outputOptions = {};
 
-module.exports = { mockReporterPlugin };
+    this.onInfo = this.onInfo.bind(this);
+    this.onStats = this.onStats.bind(this);
+    this.onError = this.onError.bind(this);
+    this.onWarning = this.onWarning.bind(this);
+  }
+
+  incrementHookCounter(hookName) {
+    if (!this.counter[hookName]) this.counter[hookName] = 0;
+    this.counter[hookName] += 1;
+  }
+
+  apply(reporter, outputOptions) {
+    this.outputOptions = outputOptions || {};
+
+    reporter.hooks.info.tap('Reporter', this.onInfo);
+    reporter.hooks.stats.tap('Reporter', this.onStats);
+    reporter.hooks.error.tap('Reporter', this.onError);
+    reporter.hooks.warn.tap('Reporter', this.onWarning);
+  }
+
+  onInfo(hookData) {
+    const { hookId, message } = hookData;
+    this.incrementHookCounter(hookId);
+    this.print(message || hookId);
+  }
+
+  onError(hookData) {
+    const error = hookData.data;
+    this.print(error);
+  }
+
+  onWarning(hookData) {
+    const warn = hookData.data;
+    this.print(warn);
+  }
+
+  onStats(hookData) {
+    const statsString = hookData.data.toString(this.outputOptions);
+    if (statsString) this.print(statsString);
+  }
+
+  print(text) {
+    process.stdout.write(`${text}\n`);
+  }
+}
+
+const mockReporterPlugin = () => new MockReporterPlugin();
+const mockReporter = () => new MockReporter();
+
+module.exports = { mockReporterPlugin, mockReporter };
