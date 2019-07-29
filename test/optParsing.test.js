@@ -1,5 +1,5 @@
 const ReporterPlugin = require('../src');
-// const Reporter = require('../src/Reporter');
+const Reporter = require('../src/Reporter');
 
 describe('reporter plugin options', () => {
   it('should have default values', () => {
@@ -8,6 +8,7 @@ describe('reporter plugin options', () => {
     expect(plugin.compilerHooks).toMatchSnapshot();
     expect(plugin.compilationHooks).toMatchSnapshot();
   });
+
   it('should handle "defaults: false"', () => {
     /* eslint-disable no-new */
     const plugin = new ReporterPlugin({
@@ -18,6 +19,7 @@ describe('reporter plugin options', () => {
     expect(plugin.compilerHooks).toMatchSnapshot();
     expect(plugin.compilationHooks).toMatchSnapshot();
   });
+
   it('should handle "defaults: false" and hooks settings', () => {
     /* eslint-disable no-new */
     const plugin = new ReporterPlugin({
@@ -28,6 +30,26 @@ describe('reporter plugin options', () => {
         },
         compilation: {
           seal: true,
+          buildModule: 5,
+          contentHash: '4ms',
+        },
+      },
+    });
+    expect(plugin.compilerHooks).toMatchSnapshot();
+    expect(plugin.compilationHooks).toMatchSnapshot();
+    expect(plugin.hookStats).toMatchSnapshot();
+  });
+
+  it('should handle "defaults: true" and hook configurations', () => {
+    /* eslint-disable no-new */
+    const plugin = new ReporterPlugin({
+      hooks: {
+        defaults: true,
+        compiler: {
+          done: false,
+        },
+        compilation: {
+          seal: false,
           buildModule: 5,
           contentHash: '4ms',
         },

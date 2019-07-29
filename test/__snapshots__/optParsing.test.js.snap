@@ -143,6 +143,87 @@ HookStats {
 }
 `;
 
+exports[`reporter plugin options should handle "defaults: true" and hook configurations 1`] = `
+Object {
+  "beforeCompile": true,
+  "beforeRun": true,
+  "compilation": true,
+  "compile": true,
+  "done": false,
+  "emit": true,
+  "failed": true,
+  "invalid": true,
+  "run": true,
+  "watchClose": true,
+  "watchRun": true,
+}
+`;
+
+exports[`reporter plugin options should handle "defaults: true" and hook configurations 2`] = `
+Object {
+  "additionalAssets": true,
+  "additionalChunkAssets": true,
+  "afterChunks": true,
+  "afterHash": true,
+  "afterOptimizeAssets": true,
+  "afterOptimizeChunkAssets": true,
+  "afterOptimizeChunkIds": true,
+  "afterOptimizeChunkModules": true,
+  "afterOptimizeChunks": true,
+  "afterOptimizeDependencies": true,
+  "afterOptimizeModuleIds": true,
+  "afterOptimizeModules": true,
+  "afterOptimizeTree": true,
+  "afterSeal": true,
+  "beforeChunkAssets": true,
+  "beforeChunkIds": true,
+  "beforeChunks": true,
+  "beforeHash": true,
+  "beforeModuleAssets": true,
+  "beforeModuleIds": true,
+  "buildModule": true,
+  "contentHash": true,
+  "finishModules": true,
+  "moduleIds": true,
+  "optimize": true,
+  "optimizeAssets": true,
+  "optimizeChunkAssets": true,
+  "optimizeChunkIds": true,
+  "optimizeChunkModules": true,
+  "optimizeChunks": true,
+  "optimizeDependencies": true,
+  "optimizeModuleIds": true,
+  "optimizeModules": true,
+  "optimizeTree": true,
+  "record": true,
+  "recordChunks": true,
+  "recordHash": true,
+  "recordModules": true,
+  "reviveChunks": true,
+  "reviveModules": true,
+  "seal": false,
+}
+`;
+
+exports[`reporter plugin options should handle "defaults: true" and hook configurations 3`] = `
+HookStats {
+  "hooks": Object {
+    "compilation.buildModule": Object {
+      "count": 0,
+      "lastCall": 0,
+      "name": "compilation.buildModule",
+      "throttle": 5,
+    },
+    "compilation.contentHash": Object {
+      "count": 0,
+      "lastCall": 0,
+      "name": "compilation.contentHash",
+      "throttle": "4ms",
+    },
+  },
+}
+`;
+
 exports[`reporter plugin options should have default values 1`] = `
 Object {
   "beforeCompile": true,
