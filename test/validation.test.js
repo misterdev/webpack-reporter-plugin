@@ -143,4 +143,25 @@ describe('plugin parameters', () => {
       });
     }).toThrowErrorMatchingSnapshot();
   });
+  // TODO
+  it('should recognize wrong compiler hooks', () => {});
+
+  it('should work for the README example', () => {
+    expect(() => {
+      new ReporterPlugin({
+        defaults: true,
+        hooks: {
+          compiler: {
+            done: true,
+            emit: false,
+          },
+          compilation: {
+            buildModule: 5,
+            contentHash: '2ms',
+          },
+        },
+        reporters: [new Reporter()],
+      });
+    }).not.toThrow();
+  });
 });

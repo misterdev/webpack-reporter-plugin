@@ -56,7 +56,7 @@ module.exports = {
   plugins: [
     // each parameter is optional
     new ReporterPlugin({
-      default: true, // wheter or not include the default hooks, [default: true]
+      defaults: true, // wheter or not include the default hooks, [default: true]
       hooks: {
         compiler: {
           done: true, // listen this hook
