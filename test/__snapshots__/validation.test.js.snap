@@ -14,6 +14,13 @@ exports[`plugin parameters should only accept boolean for "hooks.defaults" optio
 exports[`plugin parameters should recognize wrong keys 1`] = `
 "Invalid configuration: options should NOT have additional properties.
 
-	Invalid key \\"wrongKey\\" must be one of: defaults,hooks,reporters
+	Invalid key \\"wrongKey\\" must be one of: hooks,reporters
+"
+`;
+
+exports[`plugin parameters should recognize wrong keys 2`] = `
+"Invalid configuration: options should NOT have additional properties.
+
+	Invalid key \\"defaults\\" must be one of: hooks,reporters
 "
 `;

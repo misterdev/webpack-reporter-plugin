@@ -116,6 +116,11 @@ describe('plugin parameters', () => {
         wrongKey: true,
       });
     }).toThrowErrorMatchingSnapshot();
+    expect(() => {
+      new ReporterPlugin({
+        defaults: true,
+      });
+    }).toThrowErrorMatchingSnapshot();
   });
 
   it('should only accept boolean for "hooks.defaults" option', () => {
@@ -149,8 +154,8 @@ describe('plugin parameters', () => {
   it('should work for the README example', () => {
     expect(() => {
       new ReporterPlugin({
-        defaults: true,
         hooks: {
+          defaults: true,
           compiler: {
             done: true,
             emit: false,
