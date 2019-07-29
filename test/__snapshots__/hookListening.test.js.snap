@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ReporterPlugin should print the default hooks when using "defaults: true" 1`] = `
+exports[`ReporterPlugin should log the default hooks when using "defaults: true" 1`] = `
 [MockFunction] {
   "calls": Array [
     Array [
