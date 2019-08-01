@@ -1,0 +1,287 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`reporter plugin options should handle "defaults: false" 1`] = `
+Object {
+  "beforeCompile": false,
+  "beforeRun": false,
+  "compilation": false,
+  "compile": false,
+  "done": false,
+  "emit": false,
+  "failed": false,
+  "invalid": false,
+  "run": false,
+  "watchClose": false,
+  "watchRun": false,
+}
+`;
+
+exports[`reporter plugin options should handle "defaults: false" 2`] = `
+Object {
+  "additionalAssets": false,
+  "additionalChunkAssets": false,
+  "afterChunks": false,
+  "afterHash": false,
+  "afterOptimizeAssets": false,
+  "afterOptimizeChunkAssets": false,
+  "afterOptimizeChunkIds": false,
+  "afterOptimizeChunkModules": false,
+  "afterOptimizeChunks": false,
+  "afterOptimizeDependencies": false,
+  "afterOptimizeModuleIds": false,
+  "afterOptimizeModules": false,
+  "afterOptimizeTree": false,
+  "afterSeal": false,
+  "beforeChunkAssets": false,
+  "beforeChunkIds": false,
+  "beforeChunks": false,
+  "beforeHash": false,
+  "beforeModuleAssets": false,
+  "beforeModuleIds": false,
+  "buildModule": false,
+  "contentHash": false,
+  "finishModules": false,
+  "moduleIds": false,
+  "optimize": false,
+  "optimizeAssets": false,
+  "optimizeChunkAssets": false,
+  "optimizeChunkIds": false,
+  "optimizeChunkModules": false,
+  "optimizeChunks": false,
+  "optimizeDependencies": false,
+  "optimizeModuleIds": false,
+  "optimizeModules": false,
+  "optimizeTree": false,
+  "record": false,
+  "recordChunks": false,
+  "recordHash": false,
+  "recordModules": false,
+  "reviveChunks": false,
+  "reviveModules": false,
+  "seal": false,
+}
+`;
+
+exports[`reporter plugin options should handle "defaults: false" and hooks settings 1`] = `
+Object {
+  "beforeCompile": false,
+  "beforeRun": false,
+  "compilation": false,
+  "compile": false,
+  "done": true,
+  "emit": false,
+  "failed": false,
+  "invalid": false,
+  "run": false,
+  "watchClose": false,
+  "watchRun": false,
+}
+`;
+
+exports[`reporter plugin options should handle "defaults: false" and hooks settings 2`] = `
+Object {
+  "additionalAssets": false,
+  "additionalChunkAssets": false,
+  "afterChunks": false,
+  "afterHash": false,
+  "afterOptimizeAssets": false,
+  "afterOptimizeChunkAssets": false,
+  "afterOptimizeChunkIds": false,
+  "afterOptimizeChunkModules": false,
+  "afterOptimizeChunks": false,
+  "afterOptimizeDependencies": false,
+  "afterOptimizeModuleIds": false,
+  "afterOptimizeModules": false,
+  "afterOptimizeTree": false,
+  "afterSeal": false,
+  "beforeChunkAssets": false,
+  "beforeChunkIds": false,
+  "beforeChunks": false,
+  "beforeHash": false,
+  "beforeModuleAssets": false,
+  "beforeModuleIds": false,
+  "buildModule": true,
+  "contentHash": true,
+  "finishModules": false,
+  "moduleIds": false,
+  "optimize": false,
+  "optimizeAssets": false,
+  "optimizeChunkAssets": false,
+  "optimizeChunkIds": false,
+  "optimizeChunkModules": false,
+  "optimizeChunks": false,
+  "optimizeDependencies": false,
+  "optimizeModuleIds": false,
+  "optimizeModules": false,
+  "optimizeTree": false,
+  "record": false,
+  "recordChunks": false,
+  "recordHash": false,
+  "recordModules": false,
+  "reviveChunks": false,
+  "reviveModules": false,
+  "seal": true,
+}
+`;
+
+exports[`reporter plugin options should handle "defaults: false" and hooks settings 3`] = `
+HookStats {
+  "hooks": Object {
+    "compilation.buildModule": Object {
+      "count": 0,
+      "lastCall": 0,
+      "name": "compilation.buildModule",
+      "throttle": 5,
+    },
+    "compilation.contentHash": Object {
+      "count": 0,
+      "lastCall": 0,
+      "name": "compilation.contentHash",
+      "throttle": "4ms",
+    },
+  },
+}
+`;
+
+exports[`reporter plugin options should handle "defaults: true" and hook configurations 1`] = `
+Object {
+  "beforeCompile": true,
+  "beforeRun": true,
+  "compilation": true,
+  "compile": true,
+  "done": false,
+  "emit": true,
+  "failed": true,
+  "invalid": true,
+  "run": true,
+  "watchClose": true,
+  "watchRun": true,
+}
+`;
+
+exports[`reporter plugin options should handle "defaults: true" and hook configurations 2`] = `
+Object {
+  "additionalAssets": true,
+  "additionalChunkAssets": true,
+  "afterChunks": true,
+  "afterHash": true,
+  "afterOptimizeAssets": true,
+  "afterOptimizeChunkAssets": true,
+  "afterOptimizeChunkIds": true,
+  "afterOptimizeChunkModules": true,
+  "afterOptimizeChunks": true,
+  "afterOptimizeDependencies": true,
+  "afterOptimizeModuleIds": true,
+  "afterOptimizeModules": true,
+  "afterOptimizeTree": true,
+  "afterSeal": true,
+  "beforeChunkAssets": true,
+  "beforeChunkIds": true,
+  "beforeChunks": true,
+  "beforeHash": true,
+  "beforeModuleAssets": true,
+  "beforeModuleIds": true,
+  "buildModule": true,
+  "contentHash": true,
+  "finishModules": true,
+  "moduleIds": true,
+  "optimize": true,
+  "optimizeAssets": true,
+  "optimizeChunkAssets": true,
+  "optimizeChunkIds": true,
+  "optimizeChunkModules": true,
+  "optimizeChunks": true,
+  "optimizeDependencies": true,
+  "optimizeModuleIds": true,
+  "optimizeModules": true,
+  "optimizeTree": true,
+  "record": true,
+  "recordChunks": true,
+  "recordHash": true,
+  "recordModules": true,
+  "reviveChunks": true,
+  "reviveModules": true,
+  "seal": false,
+}
+`;
+
+exports[`reporter plugin options should handle "defaults: true" and hook configurations 3`] = `
+HookStats {
+  "hooks": Object {
+    "compilation.buildModule": Object {
+      "count": 0,
+      "lastCall": 0,
+      "name": "compilation.buildModule",
+      "throttle": 5,
+    },
+    "compilation.contentHash": Object {
+      "count": 0,
+      "lastCall": 0,
+      "name": "compilation.contentHash",
+      "throttle": "4ms",
+    },
+  },
+}
+`;
+
+exports[`reporter plugin options should have default values 1`] = `
+Object {
+  "beforeCompile": true,
+  "beforeRun": true,
+  "compilation": true,
+  "compile": true,
+  "done": true,
+  "emit": true,
+  "failed": true,
+  "invalid": true,
+  "run": true,
+  "watchClose": true,
+  "watchRun": true,
+}
+`;
+
+exports[`reporter plugin options should have default values 2`] = `
+Object {
+  "additionalAssets": true,
+  "additionalChunkAssets": true,
+  "afterChunks": true,
+  "afterHash": true,
+  "afterOptimizeAssets": true,
+  "afterOptimizeChunkAssets": true,
+  "afterOptimizeChunkIds": true,
+  "afterOptimizeChunkModules": true,
+  "afterOptimizeChunks": true,
+  "afterOptimizeDependencies": true,
+  "afterOptimizeModuleIds": true,
+  "afterOptimizeModules": true,
+  "afterOptimizeTree": true,
+  "afterSeal": true,
+  "beforeChunkAssets": true,
+  "beforeChunkIds": true,
+  "beforeChunks": true,
+  "beforeHash": true,
+  "beforeModuleAssets": true,
+  "beforeModuleIds": true,
+  "buildModule": true,
+  "contentHash": true,
+  "finishModules": true,
+  "moduleIds": true,
+  "optimize": true,
+  "optimizeAssets": true,
+  "optimizeChunkAssets": true,
+  "optimizeChunkIds": true,
+  "optimizeChunkModules": true,
+  "optimizeChunks": true,
+  "optimizeDependencies": true,
+  "optimizeModuleIds": true,
+  "optimizeModules": true,
+  "optimizeTree": true,
+  "record": true,
+  "recordChunks": true,
+  "recordHash": true,
+  "recordModules": true,
+  "reviveChunks": true,
+  "reviveModules": true,
+  "seal": true,
+}
+`;

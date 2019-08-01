@@ -1,5 +1,5 @@
 const ReporterPlugin = require('../src');
-const Reporter = require('../src/ColoredReporter');
+const Reporter = require('../src/Reporter');
 
 describe('plugin parameters', () => {
   it('should validate option schema', () => {
@@ -98,11 +98,75 @@ describe('plugin parameters', () => {
     }).not.toThrow();
   });
 
+  it('should handle an incorrect string as throttle value', () => {
+    expect(() => {
+      new ReporterPlugin({
+        hooks: {
+          compiler: {
+            done: '2',
+          },
+        },
+      });
+    }).toThrowErrorMatchingSnapshot();
+  });
+
   it('should recognize wrong keys', () => {
     expect(() => {
       new ReporterPlugin({
         wrongKey: true,
       });
     }).toThrowErrorMatchingSnapshot();
+    expect(() => {
+      new ReporterPlugin({
+        defaults: true,
+      });
+    }).toThrowErrorMatchingSnapshot();
+  });
+
+  it('should only accept boolean for "hooks.defaults" option', () => {
+    expect(() => {
+      new ReporterPlugin({
+        hooks: {
+          defaults: true,
+        },
+      });
+    }).not.toThrow();
+
+    expect(() => {
+      new ReporterPlugin({
+        hooks: {
+          defaults: 'true',
+        },
+      });
+    }).toThrowErrorMatchingSnapshot();
+
+    expect(() => {
+      new ReporterPlugin({
+        hooks: {
+          defaults: 2,
+        },
+      });
+    }).toThrowErrorMatchingSnapshot();
+  });
+  // TODO
+  it('should recognize wrong compiler hooks', () => {});
+
+  it('should work for the README example', () => {
+    expect(() => {
+      new ReporterPlugin({
+        hooks: {
+          defaults: true,
+          compiler: {
+            done: true,
+            emit: false,
+          },
+          compilation: {
+            buildModule: 5,
+            contentHash: '2ms',
+          },
+        },
+        reporters: [new Reporter()],
+      });
+    }).not.toThrow();
   });
 });

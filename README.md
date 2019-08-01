@@ -19,12 +19,20 @@
   <a href="https://travis-ci.org/misterdev/webpack-reporter-plugin" target="_blank" >
     <img alt="Build Status" src="https://travis-ci.org/misterdev/webpack-reporter-plugin.svg?branch=master" />
   </a>
+  <a href="https://codecov.io/gh/misterdev/webpack-reporter-plugin">
+    <img src="https://codecov.io/gh/misterdev/webpack-reporter-plugin/branch/master/graph/badge.svg" />
+  </a>
   <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
 </p>
 
+### Description
+
+There are currently 2 ways of customizing webpack's output, you can set the “[stats](https://webpack.js.org/configuration/stats/)” option to configure which bundle information you want to display or you can write a plugin (e.g. [ProgressPlugin](https://webpack.js.org/plugins/progress-plugin/), [webpackbar](https://github.com/nuxt/webpackbar), [friendly-errors-webpack-plugin](https://github.com/geowarin/friendly-errors-webpack-plugin)).
+The second approach gives you more control over the output but requires a good knowledge of how webpack works internally. This plugin abstract over webpack's internals helping writing custom reporters.
+
 ## Install
 
-You can temporary install the plugin from npm using the following command:
+You can install the plugin from npm using the following command:
 
 ```sh
 npm install test-webpack-reporter-plugin --save-dev
@@ -46,17 +54,17 @@ You can use it like any other plugin in your webpack configuration:
 module.exports = {
   // ...
   plugins: [
-    // every parameter is optional
+    // each parameter is optional
     new ReporterPlugin({
-      default: false, // exclude all default hooks, if not set it is true
       hooks: {
+        defaults: true, // wheter or not include the default hooks, [default: true]
         compiler: {
-          done: true, // include this hook
-          emit: false, // exclude this hook
+          done: true, // listen this hook
+          emit: false, // don't listen this hook
         },
         compilation: {
-          buildModule: 5, // trigger once every 5
-          contentHash: '2ms', // trigger at most once every 2ms
+          buildModule: 5, // log this hook once every 5 times
+          contentHash: '2ms', // log this hook at most once every 2ms
         },
       },
       reporters: [
@@ -68,6 +76,12 @@ module.exports = {
   ],
 };
 ```
+
+Here's an example of how the output will look like (coloured for readability):
+
+<div align="center">
+  <img src="./docs/video/new-output.gif" />
+</div>
 
 ## Writing a reporter
 

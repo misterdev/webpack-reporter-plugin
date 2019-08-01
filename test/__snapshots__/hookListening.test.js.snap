@@ -1,0 +1,394 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReporterPlugin should log the default hooks when using "defaults: true" 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "Compilation starting...
+",
+    ],
+    Array [
+      "running
+",
+    ],
+    Array [
+      "before compiling
+",
+    ],
+    Array [
+      "compiling
+",
+    ],
+    Array [
+      "compilation
+",
+    ],
+    Array [
+      "compilation.buildModule
+",
+    ],
+    Array [
+      "finish module graph
+",
+    ],
+    Array [
+      "sealing
+",
+    ],
+    Array [
+      "dependencies optimization
+",
+    ],
+    Array [
+      "after dependencies optimization
+",
+    ],
+    Array [
+      "chunk graph
+",
+    ],
+    Array [
+      "after chunk graph
+",
+    ],
+    Array [
+      "optimizing
+",
+    ],
+    Array [
+      "module optimization
+",
+    ],
+    Array [
+      "after module optimization
+",
+    ],
+    Array [
+      "chunk optimization
+",
+    ],
+    Array [
+      "after chunk optimization
+",
+    ],
+    Array [
+      "module and chunk tree optimization
+",
+    ],
+    Array [
+      "after module and chunk tree optimization
+",
+    ],
+    Array [
+      "chunk modules optimization
+",
+    ],
+    Array [
+      "after chunk modules optimization
+",
+    ],
+    Array [
+      "module reviving
+",
+    ],
+    Array [
+      "before module ids
+",
+    ],
+    Array [
+      "module ids
+",
+    ],
+    Array [
+      "module id optimization
+",
+    ],
+    Array [
+      "module id optimization
+",
+    ],
+    Array [
+      "chunk reviving
+",
+    ],
+    Array [
+      "before chunk ids
+",
+    ],
+    Array [
+      "chunk id optimization
+",
+    ],
+    Array [
+      "after chunk id optimization
+",
+    ],
+    Array [
+      "record modules
+",
+    ],
+    Array [
+      "record chunks
+",
+    ],
+    Array [
+      "hashing
+",
+    ],
+    Array [
+      "content hashing
+",
+    ],
+    Array [
+      "after hashing
+",
+    ],
+    Array [
+      "record hash
+",
+    ],
+    Array [
+      "module assets processing
+",
+    ],
+    Array [
+      "chunk assets processing
+",
+    ],
+    Array [
+      "additional chunk assets processing
+",
+    ],
+    Array [
+      "recording
+",
+    ],
+    Array [
+      "additional asset processing
+",
+    ],
+    Array [
+      "chunk asset optimization
+",
+    ],
+    Array [
+      "after chunk asset optimization
+",
+    ],
+    Array [
+      "asset optimization
+",
+    ],
+    Array [
+      "after asset optimization
+",
+    ],
+    Array [
+      "after seal
+",
+    ],
+    Array [
+      "emit
+",
+    ],
+    Array [
+      "Compilation finished
+",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+    Object {
+      "type": "return",
+      "value": true,
+    },
+  ],
+}
+`;

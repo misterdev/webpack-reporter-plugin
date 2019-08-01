@@ -52,7 +52,8 @@ class HookStats {
     if (this.hooks[hookId]) {
       this.hooks[hookId].count += 1;
     } else {
-      console.error('WTFFFF', hookId);
+      // TODO improve
+      console.error("THIS SHOULDN'T HAPPEN", hookId);
     }
   }
 

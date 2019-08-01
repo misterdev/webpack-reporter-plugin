@@ -1,8 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`plugin parameters should recognize wrong keys 1`] = `
-"Reporter Plugin Invalid Options
+exports[`plugin parameters should handle an incorrect string as throttle value 1`] = `
+"Invalid configuration: hooks.compiler
 
-options should NOT have additional properties
+	\\"compiler.done\\" value must be boolean, number or a string ending with \\"ms\\"
+"
+`;
+
+exports[`plugin parameters should only accept boolean for "hooks.defaults" option 1`] = `"should be boolean"`;
+
+exports[`plugin parameters should only accept boolean for "hooks.defaults" option 2`] = `"should be boolean"`;
+
+exports[`plugin parameters should recognize wrong keys 1`] = `
+"Invalid configuration: options should NOT have additional properties.
+
+	Invalid key \\"wrongKey\\" must be one of: hooks,reporters
+"
+`;
+
+exports[`plugin parameters should recognize wrong keys 2`] = `
+"Invalid configuration: options should NOT have additional properties.
+
+	Invalid key \\"defaults\\" must be one of: hooks,reporters
 "
 `;

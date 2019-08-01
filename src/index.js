@@ -3,10 +3,10 @@ MIT License http://www.opensource.org/licenses/mit-license.php
 Author Devid Farinelli @misterdev
 */
 
-const validateOptions = require('schema-utils');
 const { Tapable, SyncWaterfallHook } = require('tapable');
 
-const schema = require('./options.json');
+const validateOptions = require('./utils/validateSchema');
+const schema = require('./schema/schema.json');
 const Reporter = require('./Reporter');
 const formatter = require('./utils/formatter');
 const { HookStats, HookData } = require('./HookStats');
@@ -77,9 +77,8 @@ const compilationHooks = (selected) => ({
 });
 
 /**
- * @typedef {object} Stats -- TODO import from webpack
+ * @typedef {object} Stats -- // TODO import from webpack
  */
-
 class ReporterPlugin extends Tapable {
   constructor(options = {}) {
     super();
@@ -107,7 +106,11 @@ class ReporterPlugin extends Tapable {
     this.hookStats = new HookStats();
     this.formatter = formatter;
 
-    validateOptions(schema, options, 'Reporter Plugin');
+    /** @type {String[]} */
+    const validationErrors = validateOptions(schema, options);
+    if (validationErrors.length) {
+      throw new Error(validationErrors[0]);
+    }
     this.options = this.defaultOptions(options);
 
     this.reporters = this.options.reporters;
@@ -154,11 +157,7 @@ class ReporterPlugin extends Tapable {
         if (typeof throttle === 'boolean') {
           this.compilerHooks[hookName] = throttle;
         } else {
-          if (typeof throttle !== 'number' && !throttle.endsWith('ms')) {
-            throw new Error(
-              `Throttle value for compiler.${hookName} should be boolean, number or a string ending with "ms"\n`
-            );
-          }
+          this.compilerHooks[hookName] = true;
           // if the value is number/string set the throttling
           const hookId = `compiler.${hookName}`;
           this.hookStats.initHook(hookId, throttle);
@@ -172,11 +171,7 @@ class ReporterPlugin extends Tapable {
         if (typeof throttle === 'boolean') {
           this.compilationHooks[hookName] = throttle;
         } else {
-          if (typeof throttle !== 'number' && !throttle.endsWith('ms')) {
-            throw new Error(
-              `Throttle value for compilation.${hookName} should be boolean, number or a string ending with "ms"\n`
-            );
-          }
+          this.compilationHooks[hookName] = true;
           const hookId = `compilation.${hookName}`;
           this.hookStats.initHook(hookId, throttle);
         }
@@ -206,6 +201,7 @@ class ReporterPlugin extends Tapable {
         if (hook) {
           hook.tap(REPORTER_PLUGIN, this.hookHandler(hookId));
         } else {
+          // TODO is it correct to pass this to the plugin?
           this.emitError({
             data: `Error: The "${hookId}" hook does not exists`,
           });
@@ -296,13 +292,6 @@ class ReporterPlugin extends Tapable {
 ReporterPlugin.defaultOptions = {
   hooks: {
     defaults: true,
-    compiler: {
-      done: true,
-    },
-    compilation: {
-      buildModule: 5,
-      contentHash: '4ms',
-    },
   },
   reporters: [new Reporter()],
 };

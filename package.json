@@ -21,24 +21,26 @@
     "test:coverage": "jest --collectCoverageFrom=\"src/**/*.js\" --coverage"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^8.0.0",
-    "@types/node": "^12.0.5",
+    "@commitlint/config-conventional": "^8.1.0",
+    "@types/node": "^12.6.8",
     "@types/tapable": "^1.0.4",
     "@webpack-contrib/eslint-config-webpack": "^3.0.0",
-    "commitlint": "^8.0.0",
+    "commitlint": "^8.1.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.3.0",
-    "eslint-plugin-import": "^2.17.3",
-    "husky": "^2.4.0",
+    "eslint-plugin-import": "^2.18.1",
+    "husky": "^2.7.0",
     "jest": "^24.8.0",
-    "lint-staged": "^8.1.7",
+    "jest-mock-process": "^1.2.0",
+    "lint-staged": "^8.2.1",
     "np": "^5.0.3",
     "npm-run-all": "^4.1.5",
-    "prettier": "^1.17.1",
-    "typescript": "^3.5.1"
+    "prettier": "^1.18.2",
+    "typescript": "^3.5.3",
+    "webpack": "^4.36.1"
   },
   "dependencies": {
-    "schema-utils": "^1.0.0",
+    "ajv": "^6.10.2",
     "tapable": "^1.1.3"
   }
 }
