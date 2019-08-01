@@ -6,12 +6,10 @@ const ReporterPlugin = require('../src/index');
 const { mockReporter } = require('./helpers');
 
 describe('ReporterPlugin', () => {
-  // false
-  // throttling
   it('should log the default hooks when using "defaults: true"', (done) => {
     const mockStdout = mockProcess.mockProcessStdout();
     const compiler = webpack({
-      mode: 'production',
+      mode: 'none',
       context: __dirname,
       entry: './fixtures/a',
       plugins: [
@@ -33,6 +31,7 @@ describe('ReporterPlugin', () => {
   it('should not print when setting "defaults: false"', (done) => {
     const mockStdout = mockProcess.mockProcessStdout();
     const compiler = webpack({
+      mode: 'none',
       context: __dirname,
       entry: './fixtures/a',
       plugins: [
@@ -53,6 +52,7 @@ describe('ReporterPlugin', () => {
   it('should not listen default hooks when using "defaults: false"', (done) => {
     const mockStdout = mockProcess.mockProcessStdout();
     const compiler = webpack({
+      mode: 'none',
       context: __dirname,
       entry: './fixtures/a',
       plugins: [
@@ -69,6 +69,36 @@ describe('ReporterPlugin', () => {
     });
     compiler.run((err, stats) => {
       expect(mockStdout).toHaveBeenCalledWith('Compilation finished\n');
+      mockStdout.mockRestore();
+      done();
+    });
+  });
+
+  it('should throttle', (done) => {
+    const mockStdout = mockProcess.mockProcessStdout();
+    const compiler = webpack({
+      mode: 'none',
+      context: __dirname,
+      entry: {
+        a: './fixtures/a',
+        b: './fixtures/b',
+        c: './fixtures/c',
+        d: './fixtures/d',
+        e: './fixtures/e',
+      },
+      plugins: [
+        new ReporterPlugin({
+          hooks: {
+            compilation: {
+              buildModule: 2,
+            },
+          },
+          reporters: [mockReporter()],
+        }),
+      ],
+    });
+    compiler.run((err, stats) => {
+      expect(mockStdout).toMatchSnapshot();
       mockStdout.mockRestore();
       done();
     });
