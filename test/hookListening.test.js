@@ -49,7 +49,7 @@ describe('ReporterPlugin', () => {
     });
   });
 
-  it('should not listen default hooks when using "defaults: false"', (done) => {
+  it('should listen compiler hooks', (done) => {
     const mockStdout = mockProcess.mockProcessStdout();
     const compiler = webpack({
       mode: 'none',
@@ -69,6 +69,31 @@ describe('ReporterPlugin', () => {
     });
     compiler.run((err, stats) => {
       expect(mockStdout).toHaveBeenCalledWith('Compilation finished\n');
+      mockStdout.mockRestore();
+      done();
+    });
+  });
+
+  it('should listen compilation hooks', (done) => {
+    const mockStdout = mockProcess.mockProcessStdout();
+    const compiler = webpack({
+      mode: 'none',
+      context: __dirname,
+      entry: './fixtures/a',
+      plugins: [
+        new ReporterPlugin({
+          hooks: {
+            defaults: false,
+            compilation: {
+              buildModule: true,
+            },
+          },
+          reporters: [mockReporter()],
+        }),
+      ],
+    });
+    compiler.run((err, stats) => {
+      expect(mockStdout).toHaveBeenCalledWith('compilation.buildModule\n');
       mockStdout.mockRestore();
       done();
     });
