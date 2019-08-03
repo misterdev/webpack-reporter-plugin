@@ -10,7 +10,6 @@
   A plugin to customize webpack&#39s output
 </p>
 <br>
-
 <p>
   <a href="https://www.npmjs.com/package/test-webpack-reporter-plugin">
     <img src="https://img.shields.io/npm/v/test-webpack-reporter-plugin.svg"
@@ -24,6 +23,22 @@
   </a>
   <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
 </p>
+
+### Table of Contents
+
+- [Description](#description)
+- [Install](#install)
+- [Usage](#usage)
+- [Configuration](#configuration)
+  - [reporters (optional)](<#reporters-(optional)>)
+  - [hooks (optional)](<#hooks-(optional)>)
+    - [defaults (optional)](<#defaults-(optional)>)
+    - [compiler (optional)](<#compiler-(optional)>)
+    - [compilation (optional)](<#compilation-(optional)>)
+  - [throttling](#throttling)
+- [Custom Reporters](#custom-reporter)
+- [HookData Structure](#hookdata-structure)
+- [Testing](#testing)
 
 ### Description
 
@@ -57,7 +72,8 @@ module.exports = {
     // each parameter is optional
     new ReporterPlugin({
       hooks: {
-        defaults: true, // wheter or not include the default hooks, [default: true]
+        defaults: true,
+        // wheter or not include the default hooks [default: true]
         compiler: {
           done: true, // listen this hook
           emit: false, // don't listen this hook
@@ -83,7 +99,91 @@ Here's an example of how the output will look like (coloured for readability):
   <img src="./docs/video/new-output.gif" />
 </div>
 
-## Writing a reporter
+## Configuration
+
+This plugin accepts an obect as parameter containing two properties:
+
+### `reporters` (optional)
+
+An array containing one or more reporters that will log the events emitted by this plugin. If not set, a default one will be used.
+
+```js
+const MyReporter = require('./MyReporter');
+//...
+new ReporterPlugin({
+  reporters: [new MyReporter()],
+});
+```
+
+### `hooks` (optional)
+
+An object used to configure which webpack hooks the plugin should listen and log. It can have those properties:
+
+- **`defaults` (optional)**
+  Tells the plugin if it should listen to a predefined set of hooks (e.g. `compilation.done`).
+  Setting it to `false` will exclude every default hook, otherwise its default value is `true`.
+
+- **`compiler` (optional)**
+  Tells the plugin which [compiler hooks](https://webpack.js.org/api/compiler-hooks/) should be included or excluded
+
+  ```js
+  new ReporterPlugin({
+    hooks: {
+      compiler: {
+        beforeRun: false, // don't log this hook
+        done: true, // listen this hook
+      },
+    },
+  });
+  ```
+
+- **`compilation` (optional)**
+  Tells the plugin which [compilation hooks](https://webpack.js.org/api/compilation-hooks/) should be included or excluded
+
+  ```js
+  new ReporterPlugin({
+    hooks: {
+      compilation: {
+        seal: false, // don't log this hook
+        record: true, // log this hook
+      },
+    },
+  });
+  ```
+
+### Throttling
+
+Some hooks like `compilation.buildModule` may be called many times during a webpack compilation, it is possible to limit the frequency of logging for specific hooks setting a "throttle value" that could be:
+
+- **integer**
+
+  Meaning that the hook will be logged once every given number of times the hook is called (e.g. once very 2 times)
+
+  ```js
+  new ReporterPlugin({
+    hooks: {
+      compilation: {
+        buildModule: 2,
+      },
+    },
+  });
+  ```
+
+- **string**
+
+  A string encoding a milliseconds value (e.g. "2ms", '20ms') meaning that the hook will be logged once every given milliseconds
+
+  ```js
+  new ReporterPlugin({
+    hooks: {
+      compilation: {
+        buildModule: '2ms',
+      },
+    },
+  });
+  ```
+
+## Custom Reporters
 
 This plugin can be extended with one or more reporters. A custom reporter is similar to a usual webpack plugin:
 
@@ -104,7 +204,7 @@ class Reporter {
 }
 ```
 
-## HookData
+## HookData Structure
 
 The reporter plugin has 4 sync waterfall hooks (see [tapable](https://github.com/webpack/tapable)): `stats`, `info`, `warn` and `error`. Each hook callback receives some data with this structure:
 
@@ -120,7 +220,7 @@ const hookData = {
 }
 ```
 
-## Run tests
+## Testing
 
 ```sh
 npm run test
