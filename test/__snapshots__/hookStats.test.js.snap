@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HookStats should increment hook counter 1`] = `
+Object {
+  "count": 3,
+  "lastCall": 0,
+  "name": "hook1",
+  "throttle": undefined,
+}
+`;
+
+exports[`HookStats should increment hook counter 2`] = `
+Object {
+  "count": 1,
+  "lastCall": 0,
+  "name": "hook2",
+  "throttle": 2,
+}
+`;
+
+exports[`HookStats should increment hook counter 3`] = `
+Object {
+  "count": 1,
+  "lastCall": 0,
+  "name": "hook3",
+  "throttle": "2ms",
+}
+`;
+
+exports[`HookStats should init hooks 1`] = `
+Object {
+  "count": 0,
+  "lastCall": 0,
+  "name": "hook1",
+  "throttle": undefined,
+}
+`;
+
+exports[`HookStats should init hooks 2`] = `
+Object {
+  "count": 0,
+  "lastCall": 0,
+  "name": "hook2",
+  "throttle": 2,
+}
+`;
+
+exports[`HookStats should init hooks 3`] = `
+Object {
+  "count": 0,
+  "lastCall": 0,
+  "name": "hook3",
+  "throttle": "2ms",
+}
+`;

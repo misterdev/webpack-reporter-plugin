@@ -52,8 +52,8 @@ class HookStats {
     if (this.hooks[hookId]) {
       this.hooks[hookId].count += 1;
     } else {
-      // TODO improve
-      console.error("THIS SHOULDN'T HAPPEN", hookId);
+      // TODO controllare questo
+      throw new Error(`Hook ${hookId} doesn't exists`);
     }
   }
 
@@ -94,11 +94,8 @@ class HookStats {
    * @returns {HookData} HookData
    */
   generateHookData(hookId, data) {
-    // TODO improve
     if (!this.hooks[hookId]) {
-      throw new Error(
-        `HOUSTON WE HAVE A SERIOUS PROBLEM, ${hookId} does not exists`
-      );
+      throw new Error(`HookStats: uninitialized hook ${hookId}`);
     }
     this.hooks[hookId].lastCall = Date.now();
     const { count, lastCall } = this.hooks[hookId];
