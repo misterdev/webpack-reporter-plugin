@@ -30,17 +30,11 @@
 - [Install](#install)
 - [Usage](#usage)
 - [Configuration](#configuration)
-  - [reporters (optional)](<#reporters-(optional)>)
-  - [hooks (optional)](<#hooks-(optional)>)
-    - [defaults (optional)](<#defaults-(optional)>)
-    - [compiler (optional)](<#compiler-(optional)>)
-    - [compilation (optional)](<#compilation-(optional)>)
-  - [throttling](#throttling)
-- [Custom Reporters](#custom-reporter)
+- [Custom Reporters](#custom-reporters)
 - [HookData Structure](#hookdata-structure)
 - [Testing](#testing)
 
-### Description
+## Description
 
 There are currently 2 ways of customizing webpack's output, you can set the “[stats](https://webpack.js.org/configuration/stats/)” option to configure which bundle information you want to display or you can write a plugin (e.g. [ProgressPlugin](https://webpack.js.org/plugins/progress-plugin/), [webpackbar](https://github.com/nuxt/webpackbar), [friendly-errors-webpack-plugin](https://github.com/geowarin/friendly-errors-webpack-plugin)).
 The second approach gives you more control over the output but requires a good knowledge of how webpack works internally. This plugin abstract over webpack's internals helping writing custom reporters.
@@ -103,7 +97,7 @@ Here's an example of how the output will look like (coloured for readability):
 
 This plugin accepts an obect as parameter containing two properties:
 
-### `reporters` (optional)
+### reporters (optional)
 
 An array containing one or more reporters that will log the events emitted by this plugin. If not set, a default one will be used.
 
@@ -115,15 +109,17 @@ new ReporterPlugin({
 });
 ```
 
-### `hooks` (optional)
+### hooks (optional)
 
 An object used to configure which webpack hooks the plugin should listen and log. It can have those properties:
 
-- **`defaults` (optional)**
+- **defaults (optional)**
+
   Tells the plugin if it should listen to a predefined set of hooks (e.g. `compilation.done`).
   Setting it to `false` will exclude every default hook, otherwise its default value is `true`.
 
-- **`compiler` (optional)**
+- **compiler (optional)**
+
   Tells the plugin which [compiler hooks](https://webpack.js.org/api/compiler-hooks/) should be included or excluded
 
   ```js
@@ -137,7 +133,8 @@ An object used to configure which webpack hooks the plugin should listen and log
   });
   ```
 
-- **`compilation` (optional)**
+- **compilation (optional)**
+
   Tells the plugin which [compilation hooks](https://webpack.js.org/api/compilation-hooks/) should be included or excluded
 
   ```js
