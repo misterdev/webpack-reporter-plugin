@@ -1,4 +1,4 @@
-const { SyncWaterfallHook } = require('tapable');
+const { SyncWaterfallHook, SyncHook } = require('tapable');
 
 class MockReporterPlugin {
   constructor() {
@@ -59,7 +59,40 @@ class MockReporter {
   }
 }
 
+class MockCompiler {
+  constructor(plugin) {
+    this.options = {};
+    this.hooks = {
+      compilation: new SyncHook(['compilation', 'params']),
+    };
+    this.compilation = {
+      hooks: {
+        buildModule: new SyncHook(['module']),
+      },
+    };
+    plugin.apply(this);
+    this.hooks.compilation.call(this.compilation);
+  }
+  run(callback) {
+    let counter = 0;
+    const callHook = () => {
+      this.compilation.hooks.buildModule.call();
+    };
+    const triggerHook = () => {
+      if (counter < 9) {
+        counter++;
+        callHook();
+        setTimeout(triggerHook, 250);
+      } else {
+        callback();
+      }
+    };
+    setTimeout(triggerHook, 250);
+  }
+}
+
 const mockReporterPlugin = () => new MockReporterPlugin();
 const mockReporter = () => new MockReporter();
+const mockCompiler = (plugin) => new MockCompiler(plugin);
 
-module.exports = { mockReporterPlugin, mockReporter };
+module.exports = { mockReporterPlugin, mockReporter, mockCompiler };

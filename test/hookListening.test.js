@@ -3,7 +3,7 @@ const mockProcess = require('jest-mock-process');
 
 const ReporterPlugin = require('../src/index');
 
-const { mockReporter } = require('./helpers');
+const { mockReporter, mockCompiler } = require('./helpers');
 
 describe('ReporterPlugin', () => {
   it('should log the default hooks when using "defaults: true"', (done) => {
@@ -99,7 +99,7 @@ describe('ReporterPlugin', () => {
     });
   });
 
-  it('should throttle', (done) => {
+  it('should log hook once every 2 times', (done) => {
     const mockStdout = mockProcess.mockProcessStdout();
     const compiler = webpack({
       mode: 'none',
@@ -114,6 +114,7 @@ describe('ReporterPlugin', () => {
       plugins: [
         new ReporterPlugin({
           hooks: {
+            defaults: false,
             compilation: {
               buildModule: 2,
             },
@@ -123,6 +124,25 @@ describe('ReporterPlugin', () => {
       ],
     });
     compiler.run((err, stats) => {
+      expect(mockStdout).toMatchSnapshot();
+      mockStdout.mockRestore();
+      done();
+    });
+  });
+
+  it('should log hook every 1s', (done) => {
+    const mockStdout = mockProcess.mockProcessStdout();
+    const plugin = new ReporterPlugin({
+      hooks: {
+        defaults: false,
+        compilation: {
+          buildModule: '1000ms',
+        },
+      },
+      reporters: [mockReporter()],
+    });
+    const compiler = mockCompiler(plugin);
+    compiler.run(() => {
       expect(mockStdout).toMatchSnapshot();
       mockStdout.mockRestore();
       done();

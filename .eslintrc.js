@@ -5,5 +5,6 @@ module.exports = {
     'guard-for-in': 'warn',
     'no-unused-vars': 'warn',
     'class-methods-use-this': 'warn',
+    'no-plusplus': 'off',
   },
 };
