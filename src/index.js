@@ -201,7 +201,6 @@ class ReporterPlugin extends Tapable {
         if (hook) {
           hook.tap(REPORTER_PLUGIN, this.hookHandler(hookId));
         } else {
-          // TODO is it correct to pass this to the plugin?
           this.emitError({
             data: `Error: The "${hookId}" hook does not exists`,
           });

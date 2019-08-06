@@ -52,8 +52,7 @@ class HookStats {
     if (this.hooks[hookId]) {
       this.hooks[hookId].count += 1;
     } else {
-      // TODO controllare questo
-      throw new Error(`Hook ${hookId} doesn't exists`);
+      throw new Error(`Hook ${hookId} isn't initialized`);
     }
   }
 

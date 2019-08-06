@@ -148,8 +148,6 @@ describe('plugin parameters', () => {
       });
     }).toThrowErrorMatchingSnapshot();
   });
-  // TODO
-  it('should recognize wrong compiler hooks', () => {});
 
   it('should work for the README example', () => {
     expect(() => {
