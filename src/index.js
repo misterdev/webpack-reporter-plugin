@@ -25,6 +25,7 @@ const compilerHooks = (selected) => ({
   failed: selected,
   invalid: selected,
   watchClose: selected,
+  infrastructureLog: selected,
 });
 
 const compilationHooks = (selected) => ({
@@ -231,6 +232,7 @@ class ReporterPlugin extends Tapable {
     const handler = {
       'compiler.done': this.onCompilerDone.bind(this),
       'compiler.failed': this.onCompilerFailed.bind(this),
+      'compiler.infrastructureLog': this.onInfrastructureLog.bind(this),
       default: (...args) => {
         hookStats.incrementCount(hookId);
         if (hookStats.shouldTrigger(hookId)) {
@@ -285,6 +287,24 @@ class ReporterPlugin extends Tapable {
       this.emitInfo(hookData);
       this.emitError(hookData);
     }
+  }
+
+  // TODO enum
+  onInfrastructureLog(name, type, args) {
+    const hookId = 'compiler.infrastructureLog';
+    const hookData = this.hookStats.generateHookData(hookId, args);
+    switch (type) {
+      case 'error':
+        this.emitError(hookData);
+        break;
+      case 'warn':
+        this.emitWarn(hookData);
+        break;
+      case 'log':
+      default:
+        this.emitInfo(hookData);
+    }
+    return true;
   }
 }
 
