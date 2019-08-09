@@ -25,7 +25,7 @@ describe('ReporterPlugin', () => {
         }),
       ],
     });
-    compiler.run((err, stats) => {
+    compiler.run(() => {
       expect(mockStdout).toMatchSnapshot();
       mockStdout.mockRestore();
       done();
@@ -46,7 +46,7 @@ describe('ReporterPlugin', () => {
         }),
       ],
     });
-    compiler.run((err, stats) => {
+    compiler.run(() => {
       expect(mockStdout).not.toHaveBeenCalled();
       mockStdout.mockRestore();
       done();
@@ -71,7 +71,7 @@ describe('ReporterPlugin', () => {
         }),
       ],
     });
-    compiler.run((err, stats) => {
+    compiler.run(() => {
       expect(mockStdout).toHaveBeenCalledWith(
         'ReporterPlugin Compilation finished\n'
       );
@@ -98,7 +98,7 @@ describe('ReporterPlugin', () => {
         }),
       ],
     });
-    compiler.run((err, stats) => {
+    compiler.run(() => {
       expect(mockStdout).toHaveBeenCalledWith(
         'ReporterPlugin compilation.buildModule\n'
       );
@@ -131,7 +131,7 @@ describe('ReporterPlugin', () => {
         }),
       ],
     });
-    compiler.run((err, stats) => {
+    compiler.run(() => {
       expect(mockStdout).toMatchSnapshot();
       mockStdout.mockRestore();
       done();

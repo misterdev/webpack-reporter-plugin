@@ -1,5 +1,4 @@
 const ReporterPlugin = require('../src');
-const Reporter = require('../src/Reporter');
 
 describe('reporter plugin options', () => {
   it('should have default values', () => {
