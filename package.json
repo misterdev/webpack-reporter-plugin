@@ -1,6 +1,6 @@
 {
   "name": "test-webpack-reporter-plugin",
-  "version": "1.0.1-1",
+  "version": "1.0.2",
   "description": "An output-reporter plugin to customize webpack's output",
   "main": "src/cjs.js",
   "repository": "https://github.com/misterdev/webpack-reporter-plugin.git",
