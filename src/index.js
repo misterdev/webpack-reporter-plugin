@@ -10,6 +10,7 @@ const schema = require('./schema/schema.json');
 const Reporter = require('./Reporter');
 const formatter = require('./utils/formatter');
 const { HookStats, HookData } = require('./HookStats');
+const LogType = require('./utils/logType');
 
 const REPORTER_PLUGIN = 'ReporterPlugin';
 
@@ -85,19 +86,19 @@ class ReporterPlugin extends Tapable {
     super();
 
     this.hooks = Object.freeze({
-      /** @type {SyncWaterfallHook<HookData>} */
-      info: new SyncWaterfallHook(['info']),
-      /** @type {SyncWaterfallHook<HookData>} */
-      warn: new SyncWaterfallHook(['warn']),
-      /** @type {SyncWaterfallHook<HookData>} */
-      error: new SyncWaterfallHook(['error']),
+      /** @type {SyncWaterfallHook<String, HookData>} */
+      info: new SyncWaterfallHook(['name', 'info']),
+      /** @type {SyncWaterfallHook<String, HookData>} */
+      warn: new SyncWaterfallHook(['name', 'warn']),
+      /** @type {SyncWaterfallHook<String, HookData>} */
+      error: new SyncWaterfallHook(['name', 'error']),
       /** @type {SyncWaterfallHook<HookData>} */
       stats: new SyncWaterfallHook(['stats']),
     });
 
-    this.emitInfo = (hookData) => this.hooks.info.call(hookData);
-    this.emitWarn = (hookData) => this.hooks.warn.call(hookData);
-    this.emitError = (hookData) => this.hooks.error.call(hookData);
+    this.emitInfo = (name, hookData) => this.hooks.info.call(name, hookData);
+    this.emitWarn = (name, hookData) => this.hooks.warn.call(name, hookData);
+    this.emitError = (name, hookData) => this.hooks.error.call(name, hookData);
     this.emitStats = (hookData) => this.hooks.stats.call(hookData);
 
     this.compilerHooks = {};
@@ -202,7 +203,7 @@ class ReporterPlugin extends Tapable {
         if (hook) {
           hook.tap(REPORTER_PLUGIN, this.hookHandler(hookId));
         } else {
-          this.emitError({
+          this.emitError(REPORTER_PLUGIN, {
             data: `Error: The "${hookId}" hook does not exists`,
           });
         }
@@ -219,7 +220,7 @@ class ReporterPlugin extends Tapable {
         if (hook) {
           hook.tap(REPORTER_PLUGIN, this.hookHandler(hookId));
         } else {
-          this.emitError({
+          this.emitError(REPORTER_PLUGIN, {
             data: `Error: The "${hookId}" hook does not exists`,
           });
         }
@@ -238,7 +239,7 @@ class ReporterPlugin extends Tapable {
         if (hookStats.shouldTrigger(hookId)) {
           /* @type {HookData} */
           const hookData = hookStats.generateHookData(hookId, args);
-          this.emitInfo(hookData);
+          this.emitInfo(REPORTER_PLUGIN, hookData);
         }
       },
     };
@@ -257,21 +258,21 @@ class ReporterPlugin extends Tapable {
     if (hookStats.shouldTrigger(hookId)) {
       /* @type {HookData} */
       const hookData = hookStats.generateHookData(hookId, stats);
-      this.emitInfo(hookData);
+      this.emitInfo(REPORTER_PLUGIN, hookData);
       this.emitStats(hookData);
     }
 
     if (stats.hasErrors()) {
       stats.compilation.errors.forEach((err) => {
         const hookData = hookStats.generateHookData(hookId, err);
-        this.emitError(hookData);
+        this.emitError(REPORTER_PLUGIN, hookData);
       });
     }
 
     if (stats.hasWarnings()) {
       stats.compilation.warnings.forEach((warn) => {
         const hookData = hookStats.generateHookData(hookId, warn);
-        this.emitWarn(hookData);
+        this.emitWarn(REPORTER_PLUGIN, hookData);
       });
     }
   }
@@ -284,25 +285,23 @@ class ReporterPlugin extends Tapable {
       /* @type {HookData} */
       const hookData = this.hookStats.generateHookData(hookId, err);
       // Emit the log
-      this.emitInfo(hookData);
-      this.emitError(hookData);
+      this.emitInfo(REPORTER_PLUGIN, hookData);
+      this.emitError(REPORTER_PLUGIN, hookData);
     }
   }
 
-  // TODO enum
   onInfrastructureLog(name, type, args) {
     const hookId = 'compiler.infrastructureLog';
-    const hookData = this.hookStats.generateHookData(hookId, args);
+    const hookData = this.hookStats.generateHookData(hookId, args, args);
     switch (type) {
-      case 'error':
-        this.emitError(hookData);
+      case LogType.error:
+        this.emitError(name, hookData);
         break;
-      case 'warn':
-        this.emitWarn(hookData);
+      case LogType.warn:
+        this.emitWarn(name, hookData);
         break;
-      case 'log':
       default:
-        this.emitInfo(hookData);
+        this.emitInfo(name, hookData);
     }
     return true;
   }

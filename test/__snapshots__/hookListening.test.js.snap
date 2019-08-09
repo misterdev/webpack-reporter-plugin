@@ -4,15 +4,15 @@ exports[`ReporterPlugin should log hook every 1s 1`] = `
 [MockFunction] {
   "calls": Array [
     Array [
-      "compilation.buildModule
+      "ReporterPlugin compilation.buildModule
 ",
     ],
     Array [
-      "compilation.buildModule
+      "ReporterPlugin compilation.buildModule
 ",
     ],
     Array [
-      "compilation.buildModule
+      "ReporterPlugin compilation.buildModule
 ",
     ],
   ],
@@ -37,11 +37,11 @@ exports[`ReporterPlugin should log hook once every 2 times 1`] = `
 [MockFunction] {
   "calls": Array [
     Array [
-      "compilation.buildModule
+      "ReporterPlugin compilation.buildModule
 ",
     ],
     Array [
-      "compilation.buildModule
+      "ReporterPlugin compilation.buildModule
 ",
     ],
   ],
@@ -62,199 +62,207 @@ exports[`ReporterPlugin should log the default hooks when using "defaults: true"
 [MockFunction] {
   "calls": Array [
     Array [
-      "Compilation starting...
+      "ReporterPlugin Error: The \\"compiler.infrastructureLog\\" hook does not exists
 ",
     ],
     Array [
-      "running
+      "ReporterPlugin Compilation starting...
 ",
     ],
     Array [
-      "before compiling
+      "ReporterPlugin running
 ",
     ],
     Array [
-      "compiling
+      "ReporterPlugin before compiling
 ",
     ],
     Array [
-      "compilation
+      "ReporterPlugin compiling
 ",
     ],
     Array [
-      "compilation.buildModule
+      "ReporterPlugin compilation
 ",
     ],
     Array [
-      "finish module graph
+      "ReporterPlugin compilation.buildModule
 ",
     ],
     Array [
-      "sealing
+      "ReporterPlugin finish module graph
 ",
     ],
     Array [
-      "dependencies optimization
+      "ReporterPlugin sealing
 ",
     ],
     Array [
-      "after dependencies optimization
+      "ReporterPlugin dependencies optimization
 ",
     ],
     Array [
-      "chunk graph
+      "ReporterPlugin after dependencies optimization
 ",
     ],
     Array [
-      "after chunk graph
+      "ReporterPlugin chunk graph
 ",
     ],
     Array [
-      "optimizing
+      "ReporterPlugin after chunk graph
 ",
     ],
     Array [
-      "module optimization
+      "ReporterPlugin optimizing
 ",
     ],
     Array [
-      "after module optimization
+      "ReporterPlugin module optimization
 ",
     ],
     Array [
-      "chunk optimization
+      "ReporterPlugin after module optimization
 ",
     ],
     Array [
-      "after chunk optimization
+      "ReporterPlugin chunk optimization
 ",
     ],
     Array [
-      "module and chunk tree optimization
+      "ReporterPlugin after chunk optimization
 ",
     ],
     Array [
-      "after module and chunk tree optimization
+      "ReporterPlugin module and chunk tree optimization
 ",
     ],
     Array [
-      "chunk modules optimization
+      "ReporterPlugin after module and chunk tree optimization
 ",
     ],
     Array [
-      "after chunk modules optimization
+      "ReporterPlugin chunk modules optimization
 ",
     ],
     Array [
-      "module reviving
+      "ReporterPlugin after chunk modules optimization
 ",
     ],
     Array [
-      "before module ids
+      "ReporterPlugin module reviving
 ",
     ],
     Array [
-      "module ids
+      "ReporterPlugin before module ids
 ",
     ],
     Array [
-      "module id optimization
+      "ReporterPlugin module ids
 ",
     ],
     Array [
-      "module id optimization
+      "ReporterPlugin module id optimization
 ",
     ],
     Array [
-      "chunk reviving
+      "ReporterPlugin module id optimization
 ",
     ],
     Array [
-      "before chunk ids
+      "ReporterPlugin chunk reviving
 ",
     ],
     Array [
-      "chunk id optimization
+      "ReporterPlugin before chunk ids
 ",
     ],
     Array [
-      "after chunk id optimization
+      "ReporterPlugin chunk id optimization
 ",
     ],
     Array [
-      "record modules
+      "ReporterPlugin after chunk id optimization
 ",
     ],
     Array [
-      "record chunks
+      "ReporterPlugin record modules
 ",
     ],
     Array [
-      "hashing
+      "ReporterPlugin record chunks
 ",
     ],
     Array [
-      "content hashing
+      "ReporterPlugin hashing
 ",
     ],
     Array [
-      "after hashing
+      "ReporterPlugin content hashing
 ",
     ],
     Array [
-      "record hash
+      "ReporterPlugin after hashing
 ",
     ],
     Array [
-      "module assets processing
+      "ReporterPlugin record hash
 ",
     ],
     Array [
-      "chunk assets processing
+      "ReporterPlugin module assets processing
 ",
     ],
     Array [
-      "additional chunk assets processing
+      "ReporterPlugin chunk assets processing
 ",
     ],
     Array [
-      "recording
+      "ReporterPlugin additional chunk assets processing
 ",
     ],
     Array [
-      "additional asset processing
+      "ReporterPlugin recording
 ",
     ],
     Array [
-      "chunk asset optimization
+      "ReporterPlugin additional asset processing
 ",
     ],
     Array [
-      "after chunk asset optimization
+      "ReporterPlugin chunk asset optimization
 ",
     ],
     Array [
-      "asset optimization
+      "ReporterPlugin after chunk asset optimization
 ",
     ],
     Array [
-      "after asset optimization
+      "ReporterPlugin asset optimization
 ",
     ],
     Array [
-      "after seal
+      "ReporterPlugin after asset optimization
 ",
     ],
     Array [
-      "emit
+      "ReporterPlugin after seal
 ",
     ],
     Array [
-      "Compilation finished
+      "ReporterPlugin emit
+",
+    ],
+    Array [
+      "ReporterPlugin Compilation finished
 ",
     ],
   ],
   "results": Array [
+    Object {
+      "type": "return",
+      "value": true,
+    },
     Object {
       "type": "return",
       "value": true,

@@ -24,14 +24,14 @@ class Reporter {
     reporter.hooks.warn.tap('Reporter', this.onWarning);
   }
 
-  onInfo(hookData) {
+  onInfo(name, hookData) {
     const { hookId, lastCall, data, message } = hookData;
     // Formats and prints the output
     this.incrementHookCounter(hookId);
     const date = new Date(lastCall);
     const time = `${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()}`;
     this.print(
-      `[Reporter] ${time} ${message || hookId} ${this.counter[hookId]}`
+      `[${name}] ${time} ${message || hookId} ${this.counter[hookId]}`
     );
   }
 
@@ -43,7 +43,7 @@ class Reporter {
     if (statsString) this.print(`${statsString}\n${delimiter}`);
   }
 
-  onError(hookData) {
+  onError(name, hookData) {
     const error = hookData.data;
 
     if (error.name === 'EntryModuleNotFoundError') {
@@ -52,12 +52,12 @@ class Reporter {
           "\nAlternatively, run 'webpack(-cli) --help' for usage info.\n"
       );
     } else {
-      this.print(`\n[Reporter]:\n\n    ${hookData.data}\n`);
+      this.print(`\n[${name}]:\n\n    ${hookData.data}\n`);
     }
   }
 
-  onWarning(hookData) {
-    this.print(`\n[Reporter]:\n\n    ${hookData.data}\n`);
+  onWarning(name, hookData) {
+    this.print(`\n[${name}]:\n\n    ${hookData.data}\n`);
   }
 
   print(text) {

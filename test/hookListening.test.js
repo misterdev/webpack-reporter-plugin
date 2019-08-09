@@ -68,7 +68,9 @@ describe('ReporterPlugin', () => {
       ],
     });
     compiler.run((err, stats) => {
-      expect(mockStdout).toHaveBeenCalledWith('Compilation finished\n');
+      expect(mockStdout).toHaveBeenCalledWith(
+        'ReporterPlugin Compilation finished\n'
+      );
       mockStdout.mockRestore();
       done();
     });
@@ -93,7 +95,9 @@ describe('ReporterPlugin', () => {
       ],
     });
     compiler.run((err, stats) => {
-      expect(mockStdout).toHaveBeenCalledWith('compilation.buildModule\n');
+      expect(mockStdout).toHaveBeenCalledWith(
+        'ReporterPlugin compilation.buildModule\n'
+      );
       mockStdout.mockRestore();
       done();
     });

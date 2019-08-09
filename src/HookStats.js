@@ -1,4 +1,4 @@
-const message = require('./utils/message');
+const hookMessage = require('./utils/message');
 
 /**
  * @typedef {object} Stats -- TODO import from webpack
@@ -90,22 +90,16 @@ class HookStats {
   /**
    * @param {string} hookId hook's id
    * @param {Object} [data] custom hook data
+   * @param {string} [message] custom message
    * @returns {HookData} HookData
    */
-  generateHookData(hookId, data) {
+  generateHookData(hookId, data, message = hookMessage[hookId]) {
     if (!this.hooks[hookId]) {
       throw new Error(`HookStats: uninitialized hook ${hookId}`);
     }
     this.hooks[hookId].lastCall = Date.now();
     const { count, lastCall } = this.hooks[hookId];
-    return new HookData(
-      this.context,
-      hookId,
-      count,
-      data,
-      lastCall,
-      message[hookId]
-    );
+    return new HookData(this.context, hookId, count, data, lastCall, message);
   }
 }
 

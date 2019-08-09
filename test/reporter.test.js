@@ -14,7 +14,7 @@ describe('Reporter should listen & print', () => {
     const mockStdout = mockProcess.mockProcessStdout();
     new Reporter().apply(reporterPlugin);
 
-    reporterPlugin.emitInfo({
+    reporterPlugin.emitInfo('Reporter', {
       hookId: 'compiler.test',
       count: 1,
       data: 'some data',
@@ -30,7 +30,7 @@ describe('Reporter should listen & print', () => {
   it('warn correctly', () => {
     const mockStdout = mockProcess.mockProcessStdout();
     new Reporter().apply(reporterPlugin);
-    reporterPlugin.emitWarn({
+    reporterPlugin.emitWarn('Reporter', {
       hookId: 'compiler.test',
       count: 1,
       data: 'this is a warn message',
@@ -47,7 +47,7 @@ describe('Reporter should listen & print', () => {
   it('error correctly', () => {
     const mockStdout = mockProcess.mockProcessStdout();
     new Reporter().apply(reporterPlugin);
-    reporterPlugin.emitError({
+    reporterPlugin.emitError('Reporter', {
       hookId: 'compiler.test',
       count: 1,
       data: new Error('a very bad error!!'),
@@ -94,17 +94,17 @@ describe('Reporter should listen & print', () => {
       message: 'compiler.test message',
     };
 
-    reporterPlugin.emitInfo(hookData);
+    reporterPlugin.emitInfo('Reporter', hookData);
     expect(mockStdout).toHaveBeenCalledWith(
       '[Reporter] 11:44:659 compiler.test message 1\n'
     );
 
-    reporterPlugin.emitInfo(hookData);
+    reporterPlugin.emitInfo('Reporter', hookData);
     expect(mockStdout).toHaveBeenCalledWith(
       '[Reporter] 11:44:659 compiler.test message 2\n'
     );
 
-    reporterPlugin.emitInfo(hookData);
+    reporterPlugin.emitInfo('Reporter', hookData);
     expect(mockStdout).toHaveBeenCalledWith(
       '[Reporter] 11:44:659 compiler.test message 3\n'
     );

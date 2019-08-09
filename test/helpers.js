@@ -3,14 +3,14 @@ const { SyncWaterfallHook, SyncHook } = require('tapable');
 class MockReporterPlugin {
   constructor() {
     this.hooks = {
-      info: new SyncWaterfallHook(['info']),
-      warn: new SyncWaterfallHook(['warn']),
-      error: new SyncWaterfallHook(['error']),
+      info: new SyncWaterfallHook(['name', 'info']),
+      warn: new SyncWaterfallHook(['name', 'warn']),
+      error: new SyncWaterfallHook(['name', 'error']),
       stats: new SyncWaterfallHook(['stats']),
     };
-    this.emitInfo = (hookData) => this.hooks.info.call(hookData);
-    this.emitWarn = (hookData) => this.hooks.warn.call(hookData);
-    this.emitError = (hookData) => this.hooks.error.call(hookData);
+    this.emitInfo = (name, hookData) => this.hooks.info.call(name, hookData);
+    this.emitWarn = (name, hookData) => this.hooks.warn.call(name, hookData);
+    this.emitError = (name, hookData) => this.hooks.error.call(name, hookData);
     this.emitStats = (hookData) => this.hooks.stats.call(hookData);
   }
 }
@@ -38,20 +38,20 @@ class MockReporter {
     reporter.hooks.warn.tap('Reporter', this.onWarning);
   }
 
-  onInfo(hookData) {
+  onInfo(name, hookData) {
     const { hookId, message } = hookData;
     this.incrementHookCounter(hookId);
-    this.print(message || hookId);
+    this.print(`${name} ${message || hookId}`);
   }
 
-  onError(hookData) {
+  onError(name, hookData) {
     const error = hookData.data;
-    this.print(error);
+    this.print(`${name} ${error}`);
   }
 
-  onWarning(hookData) {
+  onWarning(name, hookData) {
     const warn = hookData.data;
-    this.print(warn);
+    this.print(`${name} ${warn}`);
   }
 
   print(text) {
