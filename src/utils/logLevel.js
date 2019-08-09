@@ -1,7 +1,20 @@
 /**
+ * @enum {number} */
+const LogLevel = {
+  none: 6,
+  false: 6,
+  error: 5,
+  warn: 4,
+  info: 3,
+  log: 2,
+  true: 2,
+  verbose: 1,
+};
+
+/**
  * @enum {string}
  */
-module.exports = Object.freeze({
+const LogType = Object.freeze({
   error: 'error',
   warn: 'warn',
   info: 'info',
@@ -17,3 +30,8 @@ module.exports = Object.freeze({
   clear: 'clear',
   status: 'status',
 });
+
+module.exports = {
+  LogLevel,
+  LogType,
+};

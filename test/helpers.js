@@ -61,7 +61,11 @@ class MockReporter {
 
 class MockCompiler {
   constructor(plugin) {
-    this.options = {};
+    this.options = {
+      infrastructureLogging: {
+        level: 'info',
+      },
+    };
     this.hooks = {
       compilation: new SyncHook(['compilation', 'params']),
     };

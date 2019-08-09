@@ -62,10 +62,6 @@ exports[`ReporterPlugin should log the default hooks when using "defaults: true"
 [MockFunction] {
   "calls": Array [
     Array [
-      "ReporterPlugin Error: The \\"compiler.infrastructureLog\\" hook does not exists
-",
-    ],
-    Array [
       "ReporterPlugin Compilation starting...
 ",
     ],
@@ -259,10 +255,6 @@ exports[`ReporterPlugin should log the default hooks when using "defaults: true"
     ],
   ],
   "results": Array [
-    Object {
-      "type": "return",
-      "value": true,
-    },
     Object {
       "type": "return",
       "value": true,

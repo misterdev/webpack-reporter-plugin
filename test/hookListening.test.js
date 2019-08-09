@@ -16,6 +16,10 @@ describe('ReporterPlugin', () => {
         new ReporterPlugin({
           hooks: {
             defaults: true,
+            compiler: {
+              // disable this until webpack v5
+              infrastructureLog: false,
+            },
           },
           reporters: [mockReporter()],
         }),

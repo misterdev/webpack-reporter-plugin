@@ -10,7 +10,7 @@ const schema = require('./schema/schema.json');
 const Reporter = require('./Reporter');
 const formatter = require('./utils/formatter');
 const { HookStats, HookData } = require('./HookStats');
-const LogType = require('./utils/logType');
+const { LogType, LogLevel } = require('./utils/logLevel');
 
 const REPORTER_PLUGIN = 'ReporterPlugin';
 
@@ -183,6 +183,15 @@ class ReporterPlugin extends Tapable {
 
   apply(compiler, outputOptions) {
     this.hookStats.setContext(compiler.context);
+
+    // Temporary fallback
+    const logOptions = compiler.options.infrastructureLogging || {
+      level: 'info',
+      debug: false,
+    };
+    /** @type {number} */
+    this.infrastructureLogLevel = LogLevel[`${logOptions.level}`];
+
     outputOptions = outputOptions || compiler.options.stats || {};
 
     // Initialize all the reporters
@@ -293,6 +302,10 @@ class ReporterPlugin extends Tapable {
   onInfrastructureLog(name, type, args) {
     const hookId = 'compiler.infrastructureLog';
     const hookData = this.hookStats.generateHookData(hookId, args, args);
+
+    // Check log level before emitting
+    if (this.infrastructureLogLevel > LogLevel[`${type}`]) return false;
+
     switch (type) {
       case LogType.error:
         this.emitError(name, hookData);
